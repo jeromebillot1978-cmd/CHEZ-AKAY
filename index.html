@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chez Akay – Pizzeria d'Origny-Sainte-Benoîte</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold:#c9a84c; --gold-light:#f0d080; --gold-dark:#8a6820;
+    --black:#0a0a08; --surface:#13130d; --surface2:#1c1c12; --surface3:#222217;
+    --cream:#f5ead0; --muted:#6a5a3a; --border:#2a2618;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px),
+    repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px);}
+
+  /* NAV */
+  nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(10,10,8,0.97);border-bottom:1px solid rgba(201,168,76,0.15);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;}
+  .logo{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-shadow:0 0 30px rgba(201,168,76,0.3);}
+  .logo span{color:var(--cream);}
+  .nav-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent);opacity:0.4;}
+  nav ul{list-style:none;display:flex;gap:28px;align-items:center;}
+  nav ul a{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:.3s;}
+  nav ul a:hover{color:var(--gold);}
+  .nav-cta{color:var(--black)!important;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;padding:8px 18px;border-radius:2px;transition:background-position 0.4s!important;}
+  .nav-cta:hover{background-position:left!important;}
+
+  /* HERO */
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;}
+  .orn{display:flex;align-items:center;gap:10px;margin-bottom:16px;justify-content:center;}
+  .orn-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark));}
+  .orn-line.r{background:linear-gradient(90deg,var(--gold-dark),transparent);}
+  .orn-d{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+  .hero-badge{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:6px 20px;border-radius:2px;margin-bottom:20px;display:inline-block;}
+  #hero h1{font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:1;color:var(--cream);letter-spacing:4px;}
+  #hero h1 span{color:var(--gold);}
+  .hero-sub{font-size:1.2rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;}
+  .btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+  .btn-gold{padding:14px 36px;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer;transition:background-position .5s;text-decoration:none;display:inline-block;}
+  .btn-gold:hover{background-position:left;}
+  .btn-outline{padding:14px 36px;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.4);font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;border-radius:2px;text-decoration:none;transition:.3s;}
+  .btn-outline:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
+  .scroll-indicator{margin-top:60px;color:var(--muted);font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;animation:bounce 2s infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+  /* SECTIONS */
+  .section-wrap{max-width:1100px;margin:0 auto;padding:80px 20px;position:relative;z-index:1;}
+  .section-bg{background:var(--surface);padding:80px 20px;position:relative;z-index:1;}
+  .s-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dark);display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .s-label::before,.s-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  .s-label::before{max-width:30px;}
+  .s-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--cream);letter-spacing:2px;margin-bottom:8px;}
+  .s-title span{color:var(--gold);}
+  .gold-line{width:60px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0 40px;}
+
+  /* CARDS SPÉCIALITÉS */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
+  .card{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;padding:28px 22px;transition:.3s;position:relative;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .card:hover{border-color:rgba(201,168,76,0.35);transform:translateY(-5px);}
+  .card-icon{font-size:2rem;margin-bottom:14px;}
+  .card h3{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--gold);letter-spacing:2px;margin-bottom:10px;}
+  .card p{color:var(--muted);font-size:0.92rem;font-style:italic;line-height:1.7;}
+
+  /* APERÇU MENU */
+  .menu-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+  .menu-item{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;transition:.3s;}
+  .menu-item:hover{border-color:rgba(201,168,76,0.3);}
+  .menu-item h4{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--cream);letter-spacing:1px;margin-bottom:4px;}
+  .menu-item p{font-size:0.82rem;font-style:italic;color:var(--muted);max-width:240px;line-height:1.5;}
+  .price{font-family:'Cinzel',serif;color:var(--gold);font-size:1rem;font-weight:700;white-space:nowrap;margin-left:12px;}
+
+  /* HORAIRES */
+  .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+  .info-box{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;padding:28px;position:relative;}
+  .info-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .info-box h3{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--gold);letter-spacing:2px;margin-bottom:20px;text-transform:uppercase;}
+  .horaire-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;color:var(--muted);}
+  .horaire-row:last-child{border:none;}
+  .horaire-row .day{color:var(--cream);font-weight:600;}
+
+  /* CONTACT */
+  .form-group{margin-bottom:18px;}
+  .form-group label{display:block;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:7px;}
+  .form-group input,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:11px 14px;color:var(--cream);font-size:0.95rem;font-family:'Cormorant Garamond',serif;outline:none;transition:border-color .3s;}
+  .form-group input:focus,.form-group textarea:focus{border-color:var(--gold);}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted);font-style:italic;}
+  .form-group textarea{height:120px;resize:vertical;}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(201,168,76,0.1);}
+  .footer-logo{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:3px;margin-bottom:6px;}
+  footer p{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:2.2;}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(24px);transition:.7s ease;}
+  .reveal.visible{opacity:1;transform:none;}
+
+  @media(max-width:600px){
+    .nav-inner{padding:12px 16px;}
+    nav ul{gap:14px;}
+    nav ul a:not(.nav-cta){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div>
+      <div class="logo">CHEZ <span>AKAY</span></div>
+      <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;">Pizzeria · Origny-Sainte-Benoîte</div>
+    </div>
+    <ul>
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="admin.html" class="nav-cta">Admin</a></li>
+    </ul>
+  </div>
+  <div class="nav-line"></div>
+</nav>
+
+<!-- HERO -->
+<div id="accueil" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;">
+  <div class="orn"><div class="orn-line"></div><div class="orn-d"></div><div class="orn-line r"></div></div>
+  <div class="hero-badge">Pizzas · Bruschetta · Pâtes · Salades</div>
+  <h1 style="font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;color:var(--cream);letter-spacing:4px;line-height:1;">CHEZ <span style="color:var(--gold)">AKAY</span></h1>
+  <p style="font-size:1.15rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;">La pizzeria d'Origny-Sainte-Benoîte — saveurs authentiques, recettes généreuses, dès 18h30</p>
+  <div class="btns">
+    <a href="menu.html" class="btn-gold">Voir la carte</a>
+    <a href="#contact" class="btn-outline">Nous contacter</a>
+  </div>
+  <div class="scroll-indicator" style="margin-top:60px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;color:var(--muted);">▼ &nbsp; Découvrir</div>
+</div>
+
+<!-- SPÉCIALITÉS -->
+<div class="section-wrap reveal">
+  <div class="s-label">Nos points forts</div>
+  <h2 class="s-title">Nos <span>Spécialités</span></h2>
+  <div class="gold-line"></div>
+  <div class="cards">
+    <div class="card"><div class="card-icon">🍕</div><h3>Pizzas Artisanales</h3><p>Base tomate ou crème, plus de 20 recettes dont des pizzas signature comme La Driss, La Canibale ou La Montagnarde.</p></div>
+    <div class="card"><div class="card-icon">🥖</div><h3>Bruschetta</h3><p>5 recettes maison — 3 fromages, piquante, chèvre-miel, carbo ou personnalisée avec 4 ingrédients au choix.</p></div>
+    <div class="card"><div class="card-icon">🍝</div><h3>Pâtes Fraîches</h3><p>Carbo, Bolo, Fromagères, Vague saumon ou Bourguignonne — des recettes généreuses et savoureuses.</p></div>
+    <div class="card"><div class="card-icon">🥗</div><h3>Salades</h3><p>Bivague, César, Ch'ti ou Bergère — des salades fraîches et complètes pour toutes les envies.</p></div>
+  </div>
+</div>
+
+<!-- APERÇU MENU -->
+<div class="section-bg reveal">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="s-label">Sélection</div>
+    <h2 class="s-title">Quelques <span>Incontournables</span></h2>
+    <div class="gold-line"></div>
+    <div class="menu-preview">
+      <div class="menu-item"><div><h4>La Margareta</h4><p>Base tomate, olives, mozza, buffala</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Montagnarde</h4><p>Oignons, lardons, chèvre, bleu, mozza, confiture de figue</p></div><div class="price">13 €</div></div>
+      <div class="menu-item"><div><h4>La Canibale</h4><p>Oignons, merguez, chorizo, viande hachée, bacon, cheddar</p></div><div class="price">14 €</div></div>
+      <div class="menu-item"><div><h4>La Saumon Boursin</h4><p>Crème de boursin, saumon, aneth, mozza</p></div><div class="price">15 €</div></div>
+      <div class="menu-item"><div><h4>Bruschetta 3 Fromages</h4><p>Base tomate, mozza, cheddar, maroille</p></div><div class="price">8 €</div></div>
+      <div class="menu-item"><div><h4>La Bourguignonne</h4><p>Champignons, bœuf, sauce fond de veau, mozza</p></div><div class="price">12 €</div></div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <a href="menu.html" class="btn-gold">Voir toute la carte</a>
+    </div>
+  </div>
+</div>
+
+<!-- HORAIRES & CONTACT -->
+<div class="section-wrap reveal" id="contact">
+  <div class="s-label">Pratique</div>
+  <h2 class="s-title">Horaires & <span>Contact</span></h2>
+  <div class="gold-line"></div>
+  <div class="info-grid">
+    <div class="info-box">
+      <h3>⏰ Horaires</h3>
+      <div class="horaire-row"><span class="day">Lundi</span><span>Fermé</span></div>
+      <div class="horaire-row"><span class="day">Mardi – Vendredi</span><span>18h30 – 22h30</span></div>
+      <div class="horaire-row"><span class="day">Samedi</span><span>12h – 14h · 18h30 – 23h</span></div>
+      <div class="horaire-row"><span class="day">Dimanche</span><span>12h – 14h · 18h30 – 22h</span></div>
+      <div style="margin-top:16px;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:1px;color:var(--gold);">✦ Ouvert ce soir dès 18h30</div>
+    </div>
+    <div class="info-box">
+      <h3>📍 Nous trouver</h3>
+      <p style="color:var(--muted);font-style:italic;line-height:2.2;font-size:.92rem;">
+        <strong style="color:var(--cream);">Adresse :</strong> Origny-Sainte-Benoîte, Aisne<br>
+        <strong style="color:var(--cream);">Téléphone :</strong> <a href="tel:" style="color:var(--gold);text-decoration:none;" id="tel-link">À compléter</a><br>
+        <strong style="color:var(--cream);">Email :</strong> À compléter
+      </p>
+    </div>
+    <div class="info-box">
+      <h3>✉️ Nous écrire</h3>
+      <div class="form-group"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="votre@email.fr"></div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Votre message, réservation..."></textarea></div>
+      <button class="btn-gold" style="width:100%">Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">CHEZ AKAY</div>
+  <p>Pizzas · Bruschetta · Pâtes · Salades</p>
+  <p>Origny-Sainte-Benoîte · Aisne</p>
+  <p style="margin-top:12px;"><a href="legales.html" style="color:var(--gold-dark);font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:2px;text-decoration:none;">Mentions légales</a></p>
+  <p style="margin-top:8px;">Site réalisé par <a href="https://web-jercat.vercel.app" style="color:var(--gold-dark);text-decoration:none;">JERCAT</a></p>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script src="cookies.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>
