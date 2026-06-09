@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chez Akay – La Carte</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root{--gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6820;--black:#0a0a08;--surface:#13130d;--surface2:#1c1c12;--cream:#f5ead0;--muted:#6a5a3a;--border:#2a2618;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px),repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px);}
+  header{position:relative;z-index:10;border-bottom:1px solid rgba(201,168,76,0.15);}
+  .header-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;}
+  .logo-main{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-decoration:none;text-shadow:0 0 20px rgba(201,168,76,0.3);}
+  .logo-sub{font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:5px;color:var(--muted);}
+  .header-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent);opacity:0.4;}
+  nav{display:flex;gap:24px;align-items:center;}
+  nav a{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  nav a:hover{color:var(--gold);}
+  .nav-cta{color:var(--black)!important;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;padding:8px 18px;border-radius:2px;transition:background-position 0.4s!important;}
+  .nav-cta:hover{background-position:left!important;}
+  .carte-hero{position:relative;z-index:1;text-align:center;padding:60px 24px 40px;border-bottom:1px solid rgba(201,168,76,0.1);}
+  .carte-title{font-family:'Cinzel',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:var(--cream);letter-spacing:3px;line-height:1;}
+  .carte-title span{color:var(--gold);}
+  .carte-sub{font-size:1.05rem;font-style:italic;color:var(--muted);margin-top:10px;}
+  .menu-tabs-wrap{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;}
+  .menu-tabs-wrap::-webkit-scrollbar{display:none;}
+  .tab{flex:1;min-width:120px;padding:16px 8px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;position:relative;transition:color 0.3s;text-align:center;white-space:nowrap;}
+  .tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.3s;}
+  .tab.active{color:var(--gold);}
+  .tab.active::after{transform:scaleX(1);}
+  main{max-width:1100px;margin:0 auto;padding:48px 20px 80px;position:relative;z-index:1;}
+  .menu-section{display:none;}
+  .menu-section.active{display:block;}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+  .menu-item{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;transition:.3s;}
+  .menu-item:hover{border-color:rgba(201,168,76,0.3);}
+  .menu-item h4{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--cream);letter-spacing:1px;margin-bottom:4px;}
+  .menu-item p{font-size:0.82rem;font-style:italic;color:var(--muted);max-width:240px;line-height:1.5;}
+  .price{font-family:'Cinzel',serif;color:var(--gold);font-size:1rem;font-weight:700;white-space:nowrap;margin-left:12px;}
+  .menu-note{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:1px;color:var(--gold-dark);font-style:italic;margin-top:20px;padding:12px 16px;border:1px solid var(--border);border-radius:2px;text-align:center;}
+  .s-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dark);display:flex;align-items:center;gap:14px;margin-bottom:16px;margin-top:36px;}
+  .s-label::before,.s-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  .s-label::before{max-width:30px;}
+  .s-label:first-child{margin-top:0;}
+  .empty-state{text-align:center;padding:48px;font-style:italic;color:var(--muted);}
+  footer{position:relative;z-index:1;text-align:center;padding:24px;border-top:1px solid rgba(201,168,76,0.15);}
+  footer p{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:2;}
+  @media(max-width:600px){.header-inner{padding:14px 18px;}nav a:not(.nav-cta){display:none;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div><a class="logo-main" href="index.html">Chez Akay</a><div class="logo-sub">La carte</div></div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="admin.html" class="nav-cta">Admin</a>
+    </nav>
+  </div>
+  <div class="header-line"></div>
+</header>
+
+<div class="carte-hero">
+  <div style="font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:4px;color:var(--gold-dark);text-transform:uppercase;margin-bottom:10px;">Pizzeria</div>
+  <div class="carte-title">Notre <span>Carte</span></div>
+  <div class="carte-sub">Toutes nos pizzas sont préparées à la commande, avec des produits frais.</div>
+</div>
+
+<div class="menu-tabs-wrap">
+  <button class="tab active" onclick="showTab('bruschetta',this)">Bruschetta</button>
+  <button class="tab" onclick="showTab('base-tomate',this)">Base Tomate</button>
+  <button class="tab" onclick="showTab('base-creme',this)">Base Crème</button>
+  <button class="tab" onclick="showTab('special',this)">Spécial</button>
+  <button class="tab" onclick="showTab('pates',this)">Pâtes</button>
+  <button class="tab" onclick="showTab('salades',this)">Salades</button>
+</div>
+
+<main>
+  <!-- BRUSCHETTA -->
+  <div id="bruschetta" class="menu-section active">
+    <div class="s-label">Bruschetta</div>
+    <div class="menu-grid" id="bruschetta-grid">
+      <div class="menu-item"><div><h4>3 Fromages</h4><p>Base tomate, mozza, cheddar, maroille</p></div><div class="price">8 €</div></div>
+      <div class="menu-item"><div><h4>La Piquante</h4><p>Base tomate, poivrons, oignons, chorizo, mozza, piment d'Espelette</p></div><div class="price">8 €</div></div>
+      <div class="menu-item"><div><h4>Chèvre Miel</h4><p>Base crème, chèvre, miel, mozza</p></div><div class="price">8 €</div></div>
+      <div class="menu-item"><div><h4>La Carbo</h4><p>Base crème, oignons, lardons, mozza, œuf</p></div><div class="price">8 €</div></div>
+      <div class="menu-item"><div><h4>Le Perso</h4><p>Base + 4 ingrédients au choix</p></div><div class="price">10 €</div></div>
+    </div>
+  </div>
+
+  <!-- BASE TOMATE -->
+  <div id="base-tomate" class="menu-section">
+    <div class="s-label">Base Tomate</div>
+    <div class="menu-grid" id="tomate-grid">
+      <div class="menu-item"><div><h4>La Margareta</h4><p>Olives, mozza, buffala</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Thaïs</h4><p>Jambon, champignons, olives, mozza</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Neptune</h4><p>Oignons, thon, olives, tomates cerises, mozza</p></div><div class="price">11 €</div></div>
+      <div class="menu-item"><div><h4>La 7 Fromages</h4><p>Bleu, chèvre, maroille, cheddar, raclette, grana-panao, mozza</p></div><div class="price">12 €</div></div>
+      <div class="menu-item"><div><h4>La Ophélie</h4><p>Jambon, champignons, chorizo, bleu, chèvre, miel, mozza</p></div><div class="price">12 €</div></div>
+      <div class="menu-item"><div><h4>La Driss</h4><p>Oignons, champignons, jambon, bacon, chorizo, lardons, cheddar, pommes de terre, mozza, sauce andalouse</p></div><div class="price">13 €</div></div>
+      <div class="menu-item"><div><h4>La Burger</h4><p>Oignons, tomates cerises, viande hachée, cheddar, œuf cuit, sauce Burger</p></div><div class="price">13 €</div></div>
+      <div class="menu-item"><div><h4>La Spicy</h4><p>Merguez, poivrons, piment d'Espelette, oignons, chorizo, viande hachée épicée, mozza, sauce samouraï, sauce barbecue</p></div><div class="price">13 €</div></div>
+      <div class="menu-item"><div><h4>La Canibale</h4><p>Oignons, merguez, chorizo, viande hachée, bacon, cheddar, mozza, œuf, sauce andalouse</p></div><div class="price">14 €</div></div>
+      <div class="menu-item"><div><h4>L'Origny</h4><p>Oignons, poivrons, tomates cerises, kebab, mozza, œuf, fêta</p></div><div class="price">12 €</div></div>
+    </div>
+    <div class="menu-note">Supplément EXTRA : 2,50 € · Supplément croûte au fromage : 1,50 €<br>Menu enfant 10 € — 1 caprisun / 1 surprise / 1 sucette / 1 glace + 1 pizza de la carte ou pâte au jambon</div>
+  </div>
+
+  <!-- BASE CRÈME -->
+  <div id="base-creme" class="menu-section">
+    <div class="s-label">Base Crème</div>
+    <div class="menu-grid" id="creme-grid">
+      <div class="menu-item"><div><h4>La Flame</h4><p>Pâte fine, oignons, lardons, emmental</p></div><div class="price">8 €</div></div>
+      <div class="menu-item"><div><h4>Chèvre Miel</h4><p>Chèvre, miel, olives, mozza</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Tiflette</h4><p>Oignons, lardons, pommes de terre, reblochon, mozza</p></div><div class="price">11 €</div></div>
+      <div class="menu-item"><div><h4>La Raclette</h4><p>Jambon, pommes de terre, raclette, olives, bacon, mozza</p></div><div class="price">11 €</div></div>
+      <div class="menu-item"><div><h4>La Rosi</h4><p>Oignons, tomates cerises, mozza, saumon, roquette</p></div><div class="price">12 €</div></div>
+      <div class="menu-item"><div><h4>L'Indienne</h4><p>Oignons, poivrons, champignons, chicken chikka, olives, mozza, sauce curry</p></div><div class="price">12 €</div></div>
+      <div class="menu-item"><div><h4>La Voisine</h4><p>Oignons, tomates cerises, kebab, œuf, mozza, roquette</p></div><div class="price">12 €</div></div>
+      <div class="menu-item"><div><h4>La Maroille</h4><p>Lardons, pommes de terre, maroille, mozza</p></div><div class="price">12 €</div></div>
+      <div class="menu-item"><div><h4>La Paysanne</h4><p>Oignons, champignons, poulet, lardons, raclette, pommes de terre, mozza</p></div><div class="price">13 €</div></div>
+      <div class="menu-item"><div><h4>La Montagnarde</h4><p>Oignons, lardons, chèvre, bleu, mozza, confiture de figue, seranno</p></div><div class="price">13 €</div></div>
+    </div>
+  </div>
+
+  <!-- SPÉCIAL -->
+  <div id="special" class="menu-section">
+    <div class="s-label">Base Spécial</div>
+    <div class="menu-grid" id="special-grid">
+      <div class="menu-item"><div><h4>La Calzone</h4><p>Toutes nos pizzas disponibles en calzone</p></div><div class="price">Prix pizza</div></div>
+      <div class="menu-item"><div><h4>La Darta</h4><p>Base barbecue, viande hachée, merguez, chorizo, oignons, cheddar, tomates cerises, olives, mozza, œuf</p></div><div class="price">15 €</div></div>
+      <div class="menu-item"><div><h4>La Saumon Boursin</h4><p>Base crème de boursin, oignons, tomates cerises, boursin, mozza, saumon, aneth</p></div><div class="price">15 €</div></div>
+      <div class="menu-item"><div><h4>C'est vous le chef</h4><p>6 ingrédients au choix</p></div><div class="price">15 €</div></div>
+    </div>
+  </div>
+
+  <!-- PÂTES -->
+  <div id="pates" class="menu-section">
+    <div class="s-label">Les Pâtes</div>
+    <div class="menu-grid" id="pates-grid">
+      <div class="menu-item"><div><h4>La Carbo</h4><p>Oignons, lardons, crème, grana-panao, œuf</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Bolo</h4><p>Viande hachée, oignons, sauce tomate, emmental</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>Les Fromagères</h4><p>Bleu, mozza, cheddar, grana-pano</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Vague</h4><p>Oignons, tomates cerises, crème, aneth, saumon</p></div><div class="price">11 €</div></div>
+      <div class="menu-item"><div><h4>La Bourguignonne</h4><p>Champignons, oignons, carottes, sauce fond de veau, bœuf, mozza</p></div><div class="price">12 €</div></div>
+    </div>
+  </div>
+
+  <!-- SALADES -->
+  <div id="salades" class="menu-section">
+    <div class="s-label">Les Salades</div>
+    <div class="menu-grid" id="salades-grid">
+      <div class="menu-item"><div><h4>La Bivague</h4><p>Salade, tomates cerises, concombre, thon, saumon</p></div><div class="price">11 €</div></div>
+      <div class="menu-item"><div><h4>La César</h4><p>Salade, croûtons, tomates cerises, poulet, bacon, grana-panao, sauce César</p></div><div class="price">10 €</div></div>
+      <div class="menu-item"><div><h4>La Ch'ti</h4><p>Salade, oignons, tomates cerises, lardons, pommes de terre, toasts au maroille</p></div><div class="price">11 €</div></div>
+      <div class="menu-item"><div><h4>La Bergère</h4><p>Salade, oignons, tomates cerises, pommes de terre, Serrano, toast de chèvre</p></div><div class="price">11 €</div></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>Chez Akay · Origny-Sainte-Benoîte</p>
+  <p id="footer-tel">Livraison dès 18h30</p>
+  <p style="margin-top:8px;"><a href="legales.html" style="font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:2px;color:#6a5a3a;text-decoration:none;">Mentions légales</a></p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCr0SWaroXjGGv72XVla61GN0rQtxg_5A8",
+  authDomain: "chez-akay.firebaseapp.com",
+  databaseURL: "https://chez-akay-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "chez-akay",
+  storageBucket: "chez-akay.firebasestorage.app",
+  messagingSenderId: "60180585524",
+  appId: "1:60180585524:web:86207b403e614c481e7e61"
+};
+async function loadConfig() {
+  try {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const conf = await getDoc(doc(db,'config','restaurant'));
+    if (conf.exists()) {
+      const c = conf.data();
+      if (c.tel) document.getElementById('footer-tel').textContent = c.tel + ' · Livraison ' + (c.livStart||'18h30') + ' – ' + (c.livEnd||'22h30');
+    }
+  } catch(e) { console.log('Config Firestore indisponible'); }
+}
+loadConfig();
+</script>
+<script src="cookies.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>
