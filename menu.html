@@ -9,7 +9,10 @@
   :root{--gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6820;--black:#0a0a08;--surface:#13130d;--surface2:#1c1c12;--cream:#f5ead0;--muted:#6a5a3a;--border:#2a2618;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;}
-  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px),repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px);}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.01) 50px,rgba(201,168,76,0.01) 51px),
+    repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.01) 50px,rgba(201,168,76,0.01) 51px);}
   header{position:relative;z-index:10;border-bottom:1px solid rgba(201,168,76,0.15);}
   .header-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;}
   .logo-main{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-decoration:none;text-shadow:0 0 20px rgba(201,168,76,0.3);}
@@ -20,53 +23,91 @@
   nav a:hover{color:var(--gold);}
   .nav-cta{color:var(--black)!important;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;padding:8px 18px;border-radius:2px;transition:background-position 0.4s!important;}
   .nav-cta:hover{background-position:left!important;}
+
   .carte-hero{position:relative;z-index:1;text-align:center;padding:60px 24px 40px;border-bottom:1px solid rgba(201,168,76,0.1);}
   .carte-title{font-family:'Cinzel',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:var(--cream);letter-spacing:3px;line-height:1;}
   .carte-title span{color:var(--gold);}
   .carte-sub{font-size:1.05rem;font-style:italic;color:var(--muted);margin-top:10px;}
+
+  /* LOADER */
+  #loader{position:fixed;inset:0;background:var(--black);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;}
+  #loader.hidden{opacity:0;pointer-events:none;}
+  .loader-pizza{font-size:3rem;animation:spinPizza 1s linear infinite;}
+  @keyframes spinPizza{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  .loader-text{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:3px;color:var(--gold);margin-top:16px;text-transform:uppercase;}
+  .loader-bar{width:200px;height:2px;background:var(--border);border-radius:2px;margin-top:12px;overflow:hidden;}
+  .loader-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light));animation:loadBar 1.5s ease infinite;}
+  @keyframes loadBar{0%{width:0;margin-left:0;}50%{width:100%;margin-left:0;}100%{width:0;margin-left:100%;}}
+
+  /* TABS */
   .menu-tabs-wrap{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;}
   .menu-tabs-wrap::-webkit-scrollbar{display:none;}
-  .tab{flex:1;min-width:120px;padding:16px 8px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;position:relative;transition:color 0.3s;text-align:center;white-space:nowrap;}
+  .tab{flex:1;min-width:110px;padding:16px 8px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;position:relative;transition:color 0.3s;text-align:center;white-space:nowrap;}
   .tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.3s;}
   .tab.active{color:var(--gold);}
   .tab.active::after{transform:scaleX(1);}
-  main{max-width:1200px;margin:0 auto;padding:48px 20px 80px;position:relative;z-index:1;}
+
+  /* FILTRES */
+  .filtres-wrap{display:flex;gap:8px;flex-wrap:wrap;padding:20px 20px 0;max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+  .filtre{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:2px;border:1px solid rgba(201,168,76,0.2);color:var(--muted);background:transparent;cursor:pointer;transition:all .25s;}
+  .filtre:hover{border-color:var(--gold);color:var(--gold);}
+  .filtre.active{background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:center;color:var(--black);border-color:transparent;}
+
+  main{max-width:1200px;margin:0 auto;padding:32px 20px 80px;position:relative;z-index:1;}
   .menu-section{display:none;}
   .menu-section.active{display:block;}
   .s-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dark);display:flex;align-items:center;gap:14px;margin-bottom:24px;}
   .s-label::before,.s-label::after{content:'';flex:1;height:1px;background:var(--border);}
   .s-label::before{max-width:30px;}
 
-  /* CARDS AVEC PHOTO */
+  /* CARDS */
   .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;}
-  .menu-card{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;overflow:hidden;transition:border-color 0.3s,transform 0.3s;}
-  .menu-card:hover{border-color:rgba(201,168,76,0.35);transform:translateY(-3px);}
+  .menu-card{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;overflow:hidden;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;animation:cardIn .4s ease both;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .menu-card:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+  .menu-card.filtered-out{display:none;}
   .mc-top{height:160px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;background:linear-gradient(135deg,#1e1408,#2d1e0a);overflow:hidden;}
-  .mc-top img{width:100%;height:100%;object-fit:cover;display:block;}
+  .mc-top img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
+  .menu-card:hover .mc-top img{transform:scale(1.08);}
   .mc-top::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.5));pointer-events:none;}
   .mc-no-photo{font-size:3.5rem;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+  .mc-badges{position:absolute;top:10px;left:10px;z-index:2;display:flex;gap:5px;flex-wrap:wrap;}
+  .mc-badge{font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:1.5px;padding:3px 8px;text-transform:uppercase;font-weight:700;}
+  .badge-new{background:var(--gold);color:var(--black);}
+  .badge-fav{background:#8b1a1a;color:#ffcdd2;}
+  .badge-vege{background:#1b4d1b;color:#c8e6c9;}
+  .badge-spicy{background:#7a1a00;color:#ffccbc;}
   .mc-body{padding:16px 18px 18px;}
   .mc-name{font-family:'Cinzel',serif;font-size:1rem;color:var(--cream);letter-spacing:1px;margin-bottom:6px;}
   .mc-desc{font-size:0.88rem;font-style:italic;color:var(--muted);line-height:1.6;margin-bottom:14px;}
   .mc-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:12px;}
   .mc-price{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--gold);}
-
-  /* ITEMS SIMPLES (sans photo) */
-  .menu-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
-  .menu-item{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;transition:.3s;}
-  .menu-item:hover{border-color:rgba(201,168,76,0.3);}
-  .menu-item h4{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--cream);letter-spacing:1px;margin-bottom:4px;}
-  .menu-item p{font-size:0.82rem;font-style:italic;color:var(--muted);max-width:240px;line-height:1.5;}
-  .price{font-family:'Cinzel',serif;color:var(--gold);font-size:1rem;font-weight:700;white-space:nowrap;margin-left:12px;}
-
   .menu-note{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:1px;color:var(--gold-dark);font-style:italic;margin-top:20px;padding:12px 16px;border:1px solid var(--border);border-radius:2px;text-align:center;}
   .empty-state{text-align:center;padding:48px;font-style:italic;color:var(--muted);}
+
+  /* SCROLL TO TOP */
+  #scroll-top{position:fixed;bottom:28px;right:28px;z-index:200;width:44px;height:44px;background:var(--surface);border:1px solid rgba(201,168,76,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.1rem;cursor:pointer;opacity:0;pointer-events:none;transition:all .3s;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+  #scroll-top.show{opacity:1;pointer-events:all;}
+  #scroll-top:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);}
+
+  /* TEL MOBILE */
+  #tel-fixed{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;border-radius:30px;border:none;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,0.4);transition:background-position .4s;}
+  @media(max-width:768px){#tel-fixed{display:block;}}
+
   footer{position:relative;z-index:1;text-align:center;padding:24px;border-top:1px solid rgba(201,168,76,0.15);}
   footer p{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:2;}
   @media(max-width:600px){.header-inner{padding:14px 18px;}nav a:not(.nav-cta){display:none;}}
 </style>
 </head>
 <body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-pizza">🍕</div>
+  <div class="loader-text">Chargement de la carte…</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
 <header>
   <div class="header-inner">
     <div><a class="logo-main" href="index.html">Chez Akay</a><div class="logo-sub">La carte</div></div>
@@ -92,6 +133,16 @@
   <button class="tab" onclick="showTab('special',this)">Spécial</button>
   <button class="tab" onclick="showTab('pates',this)">Pâtes</button>
   <button class="tab" onclick="showTab('salades',this)">Salades</button>
+</div>
+
+<!-- FILTRES -->
+<div class="filtres-wrap" id="filtres-wrap">
+  <button class="filtre active" onclick="applyFilter('tous',this)">Tous</button>
+  <button class="filtre" onclick="applyFilter('epice',this)">🌶️ Épicé</button>
+  <button class="filtre" onclick="applyFilter('vege',this)">🌿 Végé</button>
+  <button class="filtre" onclick="applyFilter('viande',this)">🥩 Viande</button>
+  <button class="filtre" onclick="applyFilter('poisson',this)">🐟 Poisson</button>
+  <button class="filtre" onclick="applyFilter('fromage',this)">🧀 Fromage</button>
 </div>
 
 <main>
@@ -128,80 +179,77 @@
   <p style="margin-top:8px;"><a href="legales.html" style="font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:2px;color:#6a5a3a;text-decoration:none;">Mentions légales</a></p>
 </footer>
 
-<script>
-function showTab(id, btn) {
-  document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+<a href="tel:" id="tel-fixed">📞 &nbsp;Commander</a>
 
-// Données statiques de base
+<script>
 const STATIC = {
-  bruschetta: [
-    {name:'3 Fromages',desc:'Base tomate, mozza, cheddar, maroille',price:8},
-    {name:'La Piquante',desc:'Base tomate, poivrons, oignons, chorizo, mozza, piment d\'Espelette',price:8},
-    {name:'Chèvre Miel',desc:'Base crème, chèvre, miel, mozza',price:8},
-    {name:'La Carbo',desc:'Base crème, oignons, lardons, mozza, œuf',price:8},
-    {name:'Le Perso',desc:'Base + 4 ingrédients au choix',price:10},
+  bruschetta:[
+    {name:'3 Fromages',desc:'Base tomate, mozza, cheddar, maroille',price:8,tags:'fromage'},
+    {name:'La Piquante',desc:'Base tomate, poivrons, oignons, chorizo, mozza, piment d\'Espelette',price:8,tags:'epice viande'},
+    {name:'Chèvre Miel',desc:'Base crème, chèvre, miel, mozza',price:8,tags:'fromage vege'},
+    {name:'La Carbo',desc:'Base crème, oignons, lardons, mozza, œuf',price:8,tags:'viande fromage'},
+    {name:'Le Perso',desc:'Base + 4 ingrédients au choix',price:10,tags:''},
   ],
-  tomate: [
-    {name:'La Margareta',desc:'Olives, mozza, buffala',price:10},
-    {name:'La Thaïs',desc:'Jambon, champignons, olives, mozza',price:10},
-    {name:'La Neptune',desc:'Oignons, thon, olives, tomates cerises, mozza',price:11},
-    {name:'La 7 Fromages',desc:'Bleu, chèvre, maroille, cheddar, raclette, grana-panao, mozza',price:12},
-    {name:'La Ophélie',desc:'Jambon, champignons, chorizo, bleu, chèvre, miel, mozza',price:12},
-    {name:'La Driss',desc:'Oignons, champignons, jambon, bacon, chorizo, lardons, cheddar, pommes de terre, mozza, sauce andalouse',price:13},
-    {name:'La Burger',desc:'Oignons, tomates cerises, viande hachée, cheddar, œuf cuit, sauce Burger',price:13},
-    {name:'La Spicy',desc:'Merguez, poivrons, piment d\'Espelette, oignons, chorizo, viande hachée épicée, mozza, sauce samouraï',price:13},
-    {name:'La Canibale',desc:'Oignons, merguez, chorizo, viande hachée, bacon, cheddar, mozza, œuf, sauce andalouse',price:14},
-    {name:'L\'Origny',desc:'Oignons, poivrons, tomates cerises, kebab, mozza, œuf, fêta',price:12},
+  tomate:[
+    {name:'La Margareta',desc:'Olives, mozza, buffala',price:10,tags:'fromage vege',badge:'fav'},
+    {name:'La Thaïs',desc:'Jambon, champignons, olives, mozza',price:10,tags:'viande fromage'},
+    {name:'La Neptune',desc:'Oignons, thon, olives, tomates cerises, mozza',price:11,tags:'poisson fromage'},
+    {name:'La 7 Fromages',desc:'Bleu, chèvre, maroille, cheddar, raclette, grana-panao, mozza',price:12,tags:'fromage vege',badge:'fav'},
+    {name:'La Ophélie',desc:'Jambon, champignons, chorizo, bleu, chèvre, miel, mozza',price:12,tags:'viande fromage'},
+    {name:'La Driss',desc:'Oignons, champignons, jambon, bacon, chorizo, lardons, cheddar, pommes de terre, mozza, sauce andalouse',price:13,tags:'viande fromage epice'},
+    {name:'La Burger',desc:'Oignons, tomates cerises, viande hachée, cheddar, œuf cuit, sauce Burger',price:13,tags:'viande fromage'},
+    {name:'La Spicy',desc:'Merguez, poivrons, piment d\'Espelette, oignons, chorizo, viande hachée épicée, mozza',price:13,tags:'epice viande',badge:'spicy'},
+    {name:'La Canibale',desc:'Oignons, merguez, chorizo, viande hachée, bacon, cheddar, mozza, œuf, sauce andalouse',price:14,tags:'viande epice'},
+    {name:'L\'Origny',desc:'Oignons, poivrons, tomates cerises, kebab, mozza, œuf, fêta',price:12,tags:'viande fromage'},
   ],
-  creme: [
-    {name:'La Flame',desc:'Pâte fine, oignons, lardons, emmental',price:8},
-    {name:'Chèvre Miel',desc:'Chèvre, miel, olives, mozza',price:10},
-    {name:'La Tiflette',desc:'Oignons, lardons, pommes de terre, reblochon, mozza',price:11},
-    {name:'La Raclette',desc:'Jambon, pommes de terre, raclette, olives, bacon, mozza',price:11},
-    {name:'La Rosi',desc:'Oignons, tomates cerises, mozza, saumon, roquette',price:12},
-    {name:'L\'Indienne',desc:'Oignons, poivrons, champignons, chicken chikka, olives, mozza, sauce curry',price:12},
-    {name:'La Voisine',desc:'Oignons, tomates cerises, kebab, œuf, mozza, roquette',price:12},
-    {name:'La Maroille',desc:'Lardons, pommes de terre, maroille, mozza',price:12},
-    {name:'La Paysanne',desc:'Oignons, champignons, poulet, lardons, raclette, pommes de terre, mozza',price:13},
-    {name:'La Montagnarde',desc:'Oignons, lardons, chèvre, bleu, mozza, confiture de figue, seranno',price:13},
+  creme:[
+    {name:'La Flame',desc:'Pâte fine, oignons, lardons, emmental',price:8,tags:'viande fromage'},
+    {name:'Chèvre Miel',desc:'Chèvre, miel, olives, mozza',price:10,tags:'fromage vege'},
+    {name:'La Tiflette',desc:'Oignons, lardons, pommes de terre, reblochon, mozza',price:11,tags:'viande fromage'},
+    {name:'La Raclette',desc:'Jambon, pommes de terre, raclette, olives, bacon, mozza',price:11,tags:'viande fromage'},
+    {name:'La Rosi',desc:'Oignons, tomates cerises, mozza, saumon, roquette',price:12,tags:'poisson fromage',badge:'fav'},
+    {name:'L\'Indienne',desc:'Oignons, poivrons, champignons, chicken chikka, olives, mozza, sauce curry',price:12,tags:'viande epice'},
+    {name:'La Voisine',desc:'Oignons, tomates cerises, kebab, œuf, mozza, roquette',price:12,tags:'viande fromage'},
+    {name:'La Maroille',desc:'Lardons, pommes de terre, maroille, mozza',price:12,tags:'viande fromage'},
+    {name:'La Paysanne',desc:'Oignons, champignons, poulet, lardons, raclette, pommes de terre, mozza',price:13,tags:'viande fromage'},
+    {name:'La Montagnarde',desc:'Oignons, lardons, chèvre, bleu, mozza, confiture de figue, seranno',price:13,tags:'viande fromage',badge:'fav'},
   ],
-  special: [
-    {name:'La Calzone',desc:'Toutes nos pizzas disponibles en calzone',price:null},
-    {name:'La Darta',desc:'Base barbecue, viande hachée, merguez, chorizo, oignons, cheddar, tomates cerises, olives, mozza, œuf',price:15},
-    {name:'La Saumon Boursin',desc:'Base crème de boursin, oignons, tomates cerises, boursin, mozza, saumon, aneth',price:15},
-    {name:'C\'est vous le chef',desc:'6 ingrédients au choix',price:15},
+  special:[
+    {name:'La Calzone',desc:'Toutes nos pizzas disponibles en calzone',price:null,tags:''},
+    {name:'La Darta',desc:'Base barbecue, viande hachée, merguez, chorizo, oignons, cheddar, tomates cerises, olives, mozza, œuf',price:15,tags:'viande epice',badge:'new'},
+    {name:'La Saumon Boursin',desc:'Base crème de boursin, oignons, tomates cerises, boursin, mozza, saumon, aneth',price:15,tags:'poisson fromage',badge:'new'},
+    {name:'C\'est vous le chef',desc:'6 ingrédients au choix',price:15,tags:''},
   ],
-  pates: [
-    {name:'La Carbo',desc:'Oignons, lardons, crème, grana-panao, œuf',price:10},
-    {name:'La Bolo',desc:'Viande hachée, oignons, sauce tomate, emmental',price:10},
-    {name:'Les Fromagères',desc:'Bleu, mozza, cheddar, grana-pano',price:10},
-    {name:'La Vague',desc:'Oignons, tomates cerises, crème, aneth, saumon',price:11},
-    {name:'La Bourguignonne',desc:'Champignons, oignons, carottes, sauce fond de veau, bœuf, mozza',price:12},
+  pates:[
+    {name:'La Carbo',desc:'Oignons, lardons, crème, grana-panao, œuf',price:10,tags:'viande fromage'},
+    {name:'La Bolo',desc:'Viande hachée, oignons, sauce tomate, emmental',price:10,tags:'viande fromage'},
+    {name:'Les Fromagères',desc:'Bleu, mozza, cheddar, grana-pano',price:10,tags:'fromage vege'},
+    {name:'La Vague',desc:'Oignons, tomates cerises, crème, aneth, saumon',price:11,tags:'poisson'},
+    {name:'La Bourguignonne',desc:'Champignons, oignons, carottes, sauce fond de veau, bœuf, mozza',price:12,tags:'viande fromage'},
   ],
-  salades: [
-    {name:'La Bivague',desc:'Salade, tomates cerises, concombre, thon, saumon',price:11},
-    {name:'La César',desc:'Salade, croûtons, tomates cerises, poulet, bacon, grana-panao, sauce César',price:10},
-    {name:'La Ch\'ti',desc:'Salade, oignons, tomates cerises, lardons, pommes de terre, toasts au maroille',price:11},
-    {name:'La Bergère',desc:'Salade, oignons, tomates cerises, pommes de terre, Serrano, toast de chèvre',price:11},
+  salades:[
+    {name:'La Bivague',desc:'Salade, tomates cerises, concombre, thon, saumon',price:11,tags:'poisson'},
+    {name:'La César',desc:'Salade, croûtons, tomates cerises, poulet, bacon, grana-panao, sauce César',price:10,tags:'viande'},
+    {name:'La Ch\'ti',desc:'Salade, oignons, tomates cerises, lardons, pommes de terre, toasts au maroille',price:11,tags:'viande fromage'},
+    {name:'La Bergère',desc:'Salade, oignons, tomates cerises, pommes de terre, Serrano, toast de chèvre',price:11,tags:'viande fromage'},
   ],
 };
 
-const ICONS = {bruschetta:'🥖', tomate:'🍕', creme:'🍕', special:'⭐', pates:'🍝', salades:'🥗'};
+const ICONS = {bruschetta:'🥖',tomate:'🍕',creme:'🍕',special:'⭐',pates:'🍝',salades:'🥗'};
+const BADGES = {new:'<span class="mc-badge badge-new">Nouveauté</span>',fav:'<span class="mc-badge badge-fav">Coup de cœur</span>',spicy:'<span class="mc-badge badge-spicy">🌶️ Épicé</span>',vege:'<span class="mc-badge badge-vege">🌿 Végé</span>'};
+
+let currentFilter = 'tous';
 
 function renderCards(items, gridId, cat) {
   const grid = document.getElementById(gridId);
   if (!items.length) { grid.innerHTML='<div class="empty-state">Aucun article.</div>'; return; }
-  grid.innerHTML = items.map(item => `
-    <div class="menu-card">
+  grid.innerHTML = items.map((item,i) => `
+    <div class="menu-card" data-tags="${item.tags||''}" style="animation-delay:${i*0.05}s">
       <div class="mc-top">
-        ${item.photo
-          ? `<img src="${item.photo}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.mc-no-photo').style.display='flex'">`
-          : ''}
+        ${item.photo ? `<img src="${item.photo}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.mc-no-photo').style.display='flex'">` : ''}
         <div class="mc-no-photo" style="display:${item.photo?'none':'flex'}">${ICONS[cat]||'🍕'}</div>
+        <div class="mc-badges">${item.badge?BADGES[item.badge]||'':''}</div>
       </div>
       <div class="mc-body">
         <div class="mc-name">${item.name}</div>
@@ -211,11 +259,40 @@ function renderCards(items, gridId, cat) {
         </div>
       </div>
     </div>`).join('');
+  applyFilterToGrid(currentFilter);
 }
 
-// Affichage statique immédiat
+function applyFilterToGrid(filter) {
+  document.querySelectorAll('.menu-card').forEach(card => {
+    if (filter === 'tous') card.classList.remove('filtered-out');
+    else card.classList.toggle('filtered-out', !card.dataset.tags.includes(filter));
+  });
+}
+
+function applyFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filtre').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilterToGrid(filter);
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  applyFilterToGrid(currentFilter);
+}
+
+window.showTab = showTab;
+window.applyFilter = applyFilter;
+
 const CATS = ['bruschetta','tomate','creme','special','pates','salades'];
 CATS.forEach(cat => renderCards(STATIC[cat], cat+'-grid', cat));
+
+window.addEventListener('scroll', () => {
+  document.getElementById('scroll-top').classList.toggle('show', window.scrollY > 400);
+});
 </script>
 
 <script type="module">
@@ -225,7 +302,6 @@ import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gsta
 const firebaseConfig = {
   apiKey: "AIzaSyCr0SWaroXjGGv72XVla61GN0rQtxg_5A8",
   authDomain: "chez-akay.firebaseapp.com",
-  databaseURL: "https://chez-akay-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "chez-akay",
   storageBucket: "chez-akay.firebasestorage.app",
   messagingSenderId: "60180585524",
@@ -234,17 +310,17 @@ const firebaseConfig = {
 
 const CATS = ['bruschetta','tomate','creme','special','pates','salades'];
 const ICONS = {bruschetta:'🥖',tomate:'🍕',creme:'🍕',special:'⭐',pates:'🍝',salades:'🥗'};
+const BADGES = {new:'<span class="mc-badge badge-new">Nouveauté</span>',fav:'<span class="mc-badge badge-fav">Coup de cœur</span>',spicy:'<span class="mc-badge badge-spicy">🌶️ Épicé</span>',vege:'<span class="mc-badge badge-vege">🌿 Végé</span>'};
 
 function renderCards(items, gridId, cat) {
   const grid = document.getElementById(gridId);
-  if (!items.length) { grid.innerHTML='<div class="empty-state">Aucun article.</div>'; return; }
-  grid.innerHTML = items.map(item => `
-    <div class="menu-card">
+  if (!items.length) return;
+  grid.innerHTML = items.map((item,i) => `
+    <div class="menu-card" data-tags="${item.tags||''}" style="animation-delay:${i*0.05}s">
       <div class="mc-top">
-        ${item.photo
-          ? `<img src="${item.photo}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.mc-no-photo').style.display='flex'">`
-          : ''}
+        ${item.photo ? `<img src="${item.photo}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.mc-no-photo').style.display='flex'">` : ''}
         <div class="mc-no-photo" style="display:${item.photo?'none':'flex'}">${ICONS[cat]||'🍕'}</div>
+        <div class="mc-badges">${item.badge?BADGES[item.badge]||'':''}</div>
       </div>
       <div class="mc-body">
         <div class="mc-name">${item.name}</div>
@@ -256,28 +332,28 @@ function renderCards(items, gridId, cat) {
     </div>`).join('');
 }
 
-async function loadFromFirestore() {
-  try {
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    for (const cat of CATS) {
-      const snap = await getDocs(collection(db,'akay_'+cat));
-      const items = [];
-      snap.forEach(d => { if(d.data().visible!==false) items.push(d.data()); });
-      if (items.length) {
-        items.sort((a,b) => (a.order||0)-(b.order||0));
-        renderCards(items, cat+'-grid', cat);
-      }
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  for (const cat of CATS) {
+    const snap = await getDocs(collection(db,'akay_'+cat));
+    const items = [];
+    snap.forEach(d => { if(d.data().visible!==false) items.push(d.data()); });
+    if (items.length) { items.sort((a,b)=>(a.order||0)-(b.order||0)); renderCards(items, cat+'-grid', cat); }
+  }
+  const conf = await getDoc(doc(db,'config','restaurant'));
+  if (conf.exists()) {
+    const c = conf.data();
+    if (c.tel) {
+      document.getElementById('footer-tel').textContent = c.tel + ' · Livraison ' + (c.livStart||'18h30') + ' – ' + (c.livEnd||'22h30');
+      document.getElementById('tel-fixed').href = 'tel:' + c.tel.replace(/\s/g,'');
+      document.getElementById('tel-fixed').innerHTML = '📞 &nbsp;' + c.tel;
     }
-    // Config restaurant
-    const conf = await getDoc(doc(db,'config','restaurant'));
-    if (conf.exists()) {
-      const c = conf.data();
-      if (c.tel) document.getElementById('footer-tel').textContent = c.tel + ' · Livraison ' + (c.livStart||'18h30') + ' – ' + (c.livEnd||'22h30');
-    }
-  } catch(e) { console.log('Firestore indisponible, données statiques affichées.'); }
-}
-loadFromFirestore();
+  }
+} catch(e) { console.log('Firestore indisponible.'); }
+
+// Masquer loader
+setTimeout(() => document.getElementById('loader').classList.add('hidden'), 800);
 </script>
 <script src="cookies.js"></script>
 <script src="chatbot.js"></script>
