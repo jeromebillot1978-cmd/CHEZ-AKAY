@@ -6,20 +6,21 @@
 <title>Chez Akay – Pizzeria d'Origny-Sainte-Benoîte</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --gold:#c9a84c; --gold-light:#f0d080; --gold-dark:#8a6820;
-    --black:#0a0a08; --surface:#13130d; --surface2:#1c1c12; --surface3:#222217;
-    --cream:#f5ead0; --muted:#6a5a3a; --border:#2a2618;
-  }
+  :root{--gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6820;--black:#0a0a08;--surface:#13130d;--surface2:#1c1c12;--cream:#f5ead0;--muted:#6a5a3a;--border:#2a2618;}
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
-  body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;}
+  body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+
+  /* TEXTURE GRAIN */
   body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-    background-image:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px),
-    repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px);}
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.01) 50px,rgba(201,168,76,0.01) 51px),
+    repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.01) 50px,rgba(201,168,76,0.01) 51px);
+    opacity:0.8;}
 
   /* NAV */
-  nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(10,10,8,0.97);border-bottom:1px solid rgba(201,168,76,0.15);}
+  nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(10,10,8,0.97);border-bottom:1px solid rgba(201,168,76,0.15);transition:box-shadow .3s;}
+  nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,0.5);}
   .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;}
   .logo{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-shadow:0 0 30px rgba(201,168,76,0.3);}
   .logo span{color:var(--cream);}
@@ -30,23 +31,38 @@
   .nav-cta{color:var(--black)!important;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;padding:8px 18px;border-radius:2px;transition:background-position 0.4s!important;}
   .nav-cta:hover{background-position:left!important;}
 
-  /* HERO */
-  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;}
+  /* HERO + PARTICULES */
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;overflow:hidden;}
+  #particles-canvas{position:absolute;inset:0;pointer-events:none;}
+  .hero-content{position:relative;z-index:2;}
   .orn{display:flex;align-items:center;gap:10px;margin-bottom:16px;justify-content:center;}
   .orn-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark));}
   .orn-line.r{background:linear-gradient(90deg,var(--gold-dark),transparent);}
   .orn-d{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
-  .hero-badge{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:6px 20px;border-radius:2px;margin-bottom:20px;display:inline-block;}
-  #hero h1{font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:1;color:var(--cream);letter-spacing:4px;}
+  .hero-badge{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:6px 20px;border-radius:2px;margin-bottom:20px;display:inline-block;animation:fadeDown .8s ease both;}
+  #hero h1{font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:1;color:var(--cream);letter-spacing:4px;animation:fadeDown .8s ease .2s both;}
   #hero h1 span{color:var(--gold);}
-  .hero-sub{font-size:1.2rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;}
-  .btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+  .hero-sub{font-size:1.2rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;animation:fadeDown .8s ease .4s both;}
+  .btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeDown .8s ease .6s both;}
   .btn-gold{padding:14px 36px;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer;transition:background-position .5s;text-decoration:none;display:inline-block;}
   .btn-gold:hover{background-position:left;}
   .btn-outline{padding:14px 36px;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.4);font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;border-radius:2px;text-decoration:none;transition:.3s;}
   .btn-outline:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
   .scroll-indicator{margin-top:60px;color:var(--muted);font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;animation:bounce 2s infinite;}
   @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
+
+  /* COMPTEURS */
+  .counters{display:flex;gap:40px;flex-wrap:wrap;justify-content:center;margin-top:50px;animation:fadeDown .8s ease .8s both;}
+  .counter-item{text-align:center;}
+  .counter-val{font-family:'Cinzel',serif;font-size:2.5rem;font-weight:900;color:var(--gold);line-height:1;text-shadow:0 0 20px rgba(201,168,76,0.3);}
+  .counter-label{font-size:0.78rem;font-style:italic;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+
+  /* SÉPARATEUR PIZZA SVG */
+  .pizza-sep{display:flex;align-items:center;gap:16px;padding:0 20px;opacity:0.25;margin:0 auto;max-width:800px;}
+  .pizza-sep-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+  .pizza-sep-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+  .pizza-sep-icon{font-size:1.2rem;flex-shrink:0;}
 
   /* SECTIONS */
   .section-wrap{max-width:1100px;margin:0 auto;padding:80px 20px;position:relative;z-index:1;}
@@ -60,17 +76,27 @@
 
   /* CARDS SPÉCIALITÉS */
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
-  .card{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;padding:28px 22px;transition:.3s;position:relative;}
+  .card{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;padding:28px 22px;transition:.3s;position:relative;overflow:hidden;}
   .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(201,168,76,0.05),transparent 70%);opacity:0;transition:.3s;}
   .card:hover{border-color:rgba(201,168,76,0.35);transform:translateY(-5px);}
+  .card:hover::after{opacity:1;}
   .card-icon{font-size:2rem;margin-bottom:14px;}
   .card h3{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--gold);letter-spacing:2px;margin-bottom:10px;}
   .card p{color:var(--muted);font-size:0.92rem;font-style:italic;line-height:1.7;}
 
+  /* À PROPOS */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+  @media(max-width:700px){.about-grid{grid-template-columns:1fr;}}
+  .about-img{aspect-ratio:4/3;background:var(--surface2);border:1px solid rgba(201,168,76,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden;}
+  .about-img::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(201,168,76,0.08),transparent 60%);}
+  .about-text h3{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--gold);letter-spacing:2px;margin-bottom:16px;}
+  .about-text p{color:var(--muted);font-style:italic;line-height:1.9;font-size:1.05rem;margin-bottom:14px;}
+
   /* APERÇU MENU */
   .menu-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
   .menu-item{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;transition:.3s;}
-  .menu-item:hover{border-color:rgba(201,168,76,0.3);}
+  .menu-item:hover{border-color:rgba(201,168,76,0.3);transform:translateX(4px);}
   .menu-item h4{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--cream);letter-spacing:1px;margin-bottom:4px;}
   .menu-item p{font-size:0.82rem;font-style:italic;color:var(--muted);max-width:240px;line-height:1.5;}
   .price{font-family:'Cinzel',serif;color:var(--gold);font-size:1rem;font-weight:700;white-space:nowrap;margin-left:12px;}
@@ -92,25 +118,31 @@
   .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted);font-style:italic;}
   .form-group textarea{height:120px;resize:vertical;}
 
+  /* BOUTON TEL FIXE MOBILE */
+  #tel-fixed{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;border-radius:30px;border:none;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,0.4);transition:background-position .4s,transform .2s;}
+  #tel-fixed:hover{background-position:left;transform:translateX(-50%) scale(1.05);}
+  @media(max-width:768px){#tel-fixed{display:block;}}
+
+  /* SCROLL TO TOP */
+  #scroll-top{position:fixed;bottom:28px;right:28px;z-index:200;width:44px;height:44px;background:var(--surface);border:1px solid rgba(201,168,76,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.1rem;cursor:pointer;opacity:0;pointer-events:none;transition:all .3s;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+  #scroll-top.show{opacity:1;pointer-events:all;}
+  #scroll-top:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);}
+
   /* FOOTER */
   footer{position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(201,168,76,0.1);}
   .footer-logo{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:3px;margin-bottom:6px;}
   footer p{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:2.2;}
 
   /* REVEAL */
-  .reveal{opacity:0;transform:translateY(24px);transition:.7s ease;}
+  .reveal{opacity:0;transform:translateY(28px);transition:.7s ease;}
   .reveal.visible{opacity:1;transform:none;}
 
-  @media(max-width:600px){
-    .nav-inner{padding:12px 16px;}
-    nav ul{gap:14px;}
-    nav ul a:not(.nav-cta){display:none;}
-  }
+  @media(max-width:600px){.nav-inner{padding:12px 16px;}nav ul{gap:14px;}nav ul a:not(.nav-cta){display:none;}}
 </style>
 </head>
 <body>
 
-<nav>
+<nav id="main-nav">
   <div class="nav-inner">
     <div>
       <div class="logo">CHEZ <span>AKAY</span></div>
@@ -118,6 +150,7 @@
     </div>
     <ul>
       <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#about">À propos</a></li>
       <li><a href="menu.html">Menu</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="admin.html" class="nav-cta">Admin</a></li>
@@ -127,16 +160,30 @@
 </nav>
 
 <!-- HERO -->
-<div id="accueil" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;">
-  <div class="orn"><div class="orn-line"></div><div class="orn-d"></div><div class="orn-line r"></div></div>
-  <div class="hero-badge">Pizzas · Bruschetta · Pâtes · Salades</div>
-  <h1 style="font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;color:var(--cream);letter-spacing:4px;line-height:1;">CHEZ <span style="color:var(--gold)">AKAY</span></h1>
-  <p style="font-size:1.15rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;">La pizzeria d'Origny-Sainte-Benoîte — saveurs authentiques, recettes généreuses, dès 18h30</p>
-  <div class="btns">
-    <a href="menu.html" class="btn-gold">Voir la carte</a>
-    <a href="#contact" class="btn-outline">Nous contacter</a>
+<div id="accueil" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;overflow:hidden;">
+  <canvas id="particles-canvas" style="position:absolute;inset:0;pointer-events:none;"></canvas>
+  <div class="hero-content" style="position:relative;z-index:2;">
+    <div class="orn"><div class="orn-line"></div><div class="orn-d"></div><div class="orn-line r"></div></div>
+    <div class="hero-badge">Pizzas · Bruschetta · Pâtes · Salades</div>
+    <h1 style="font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;color:var(--cream);letter-spacing:4px;line-height:1;">CHEZ <span style="color:var(--gold)">AKAY</span></h1>
+    <p style="font-size:1.15rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;">La pizzeria d'Origny-Sainte-Benoîte — saveurs authentiques, recettes généreuses, dès 18h30</p>
+    <div class="btns">
+      <a href="menu.html" class="btn-gold">Voir la carte</a>
+      <a href="#contact" class="btn-outline">Nous contacter</a>
+    </div>
+    <!-- COMPTEURS -->
+    <div class="counters">
+      <div class="counter-item"><div class="counter-val" data-target="20">0</div><div class="counter-label">Pizzas au menu</div></div>
+      <div class="counter-item"><div class="counter-val" data-target="5">0</div><div class="counter-label">Années d'expérience</div></div>
+      <div class="counter-item"><div class="counter-val" data-target="4">0</div><div class="counter-label">Types de cuisine</div></div>
+    </div>
   </div>
-  <div class="scroll-indicator" style="margin-top:60px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;color:var(--muted);">▼ &nbsp; Découvrir</div>
+  <div class="scroll-indicator" style="margin-top:50px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;color:var(--muted);position:relative;z-index:2;">▼ &nbsp; Découvrir</div>
+</div>
+
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">🍕</div><div class="pizza-sep-icon">⭐</div><div class="pizza-sep-icon">🍕</div><div class="pizza-sep-line r"></div></div>
 </div>
 
 <!-- SPÉCIALITÉS -->
@@ -152,28 +199,63 @@
   </div>
 </div>
 
-<!-- APERÇU MENU -->
-<div class="section-bg reveal">
-  <div style="max-width:1100px;margin:0 auto;">
-    <div class="s-label">Sélection</div>
-    <h2 class="s-title">Quelques <span>Incontournables</span></h2>
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">🥖</div><div class="pizza-sep-icon">✦</div><div class="pizza-sep-icon">🥗</div><div class="pizza-sep-line r"></div></div>
+</div>
+
+<!-- À PROPOS -->
+<div class="section-bg" id="about">
+<div style="max-width:1100px;margin:0 auto;padding:0 20px;">
+  <div class="reveal">
+    <div class="s-label">Notre histoire</div>
+    <h2 class="s-title">À <span>Propos</span></h2>
     <div class="gold-line"></div>
-    <div class="menu-preview">
-      <div class="menu-item"><div><h4>La Margareta</h4><p>Base tomate, olives, mozza, buffala</p></div><div class="price">10 €</div></div>
-      <div class="menu-item"><div><h4>La Montagnarde</h4><p>Oignons, lardons, chèvre, bleu, mozza, confiture de figue</p></div><div class="price">13 €</div></div>
-      <div class="menu-item"><div><h4>La Canibale</h4><p>Oignons, merguez, chorizo, viande hachée, bacon, cheddar</p></div><div class="price">14 €</div></div>
-      <div class="menu-item"><div><h4>La Saumon Boursin</h4><p>Crème de boursin, saumon, aneth, mozza</p></div><div class="price">15 €</div></div>
-      <div class="menu-item"><div><h4>Bruschetta 3 Fromages</h4><p>Base tomate, mozza, cheddar, maroille</p></div><div class="price">8 €</div></div>
-      <div class="menu-item"><div><h4>La Bourguignonne</h4><p>Champignons, bœuf, sauce fond de veau, mozza</p></div><div class="price">12 €</div></div>
-    </div>
-    <div style="text-align:center;margin-top:32px;">
-      <a href="menu.html" class="btn-gold">Voir toute la carte</a>
+    <div class="about-grid">
+      <div class="about-img">🍕</div>
+      <div class="about-text">
+        <h3>La pizzeria du cœur de l'Aisne</h3>
+        <p>Chez Akay, c'est une pizzeria familiale nichée au cœur d'Origny-Sainte-Benoîte, dans l'Aisne. Depuis plusieurs années, nous préparons chaque pizza à la commande, avec des produits frais soigneusement sélectionnés.</p>
+        <p>Notre carte propose plus de 20 recettes — des classiques intemporels aux créations signature comme La Montagnarde, La Canibale ou La Saumon Boursin. Sans oublier nos bruschetta, pâtes fraîches et salades généreuses.</p>
+        <p>Une cuisine sincère, faite avec passion, pour vous régaler en famille ou entre amis.</p>
+        <a href="menu.html" class="btn-gold" style="margin-top:8px;display:inline-block;">Découvrir la carte</a>
+      </div>
     </div>
   </div>
 </div>
+</div>
+
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">🍝</div><div class="pizza-sep-icon">✦</div><div class="pizza-sep-icon">🍝</div><div class="pizza-sep-line r"></div></div>
+</div>
+
+<!-- APERÇU MENU -->
+<div class="section-wrap reveal">
+  <div class="s-label">Sélection</div>
+  <h2 class="s-title">Quelques <span>Incontournables</span></h2>
+  <div class="gold-line"></div>
+  <div class="menu-preview">
+    <div class="menu-item"><div><h4>La Margareta</h4><p>Base tomate, olives, mozza, buffala</p></div><div class="price">10 €</div></div>
+    <div class="menu-item"><div><h4>La Montagnarde</h4><p>Oignons, lardons, chèvre, bleu, mozza, confiture de figue</p></div><div class="price">13 €</div></div>
+    <div class="menu-item"><div><h4>La Canibale</h4><p>Oignons, merguez, chorizo, viande hachée, bacon, cheddar</p></div><div class="price">14 €</div></div>
+    <div class="menu-item"><div><h4>La Saumon Boursin</h4><p>Crème de boursin, saumon, aneth, mozza</p></div><div class="price">15 €</div></div>
+    <div class="menu-item"><div><h4>Bruschetta 3 Fromages</h4><p>Base tomate, mozza, cheddar, maroille</p></div><div class="price">8 €</div></div>
+    <div class="menu-item"><div><h4>La Bourguignonne</h4><p>Champignons, bœuf, sauce fond de veau, mozza</p></div><div class="price">12 €</div></div>
+  </div>
+  <div style="text-align:center;margin-top:32px;">
+    <a href="menu.html" class="btn-gold">Voir toute la carte</a>
+  </div>
+</div>
+
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">⏰</div><div class="pizza-sep-icon">✦</div><div class="pizza-sep-icon">📍</div><div class="pizza-sep-line r"></div></div>
+</div>
 
 <!-- HORAIRES & CONTACT -->
-<div class="section-wrap reveal" id="contact">
+<div class="section-bg reveal" id="contact">
+<div style="max-width:1100px;margin:0 auto;padding:80px 20px;">
   <div class="s-label">Pratique</div>
   <h2 class="s-title">Horaires & <span>Contact</span></h2>
   <div class="gold-line"></div>
@@ -190,7 +272,7 @@
       <h3>📍 Nous trouver</h3>
       <p style="color:var(--muted);font-style:italic;line-height:2.2;font-size:.92rem;">
         <strong style="color:var(--cream);">Adresse :</strong> Origny-Sainte-Benoîte, Aisne<br>
-        <strong style="color:var(--cream);">Téléphone :</strong> <a href="tel:" style="color:var(--gold);text-decoration:none;" id="tel-link">À compléter</a><br>
+        <strong style="color:var(--cream);">Téléphone :</strong> <span id="tel-display" style="color:var(--gold);">À compléter</span><br>
         <strong style="color:var(--cream);">Email :</strong> À compléter
       </p>
     </div>
@@ -203,6 +285,7 @@
     </div>
   </div>
 </div>
+</div>
 
 <footer>
   <div class="footer-logo">CHEZ AKAY</div>
@@ -212,11 +295,111 @@
   <p style="margin-top:8px;">Site réalisé par <a href="https://web-jercat.vercel.app" style="color:var(--gold-dark);text-decoration:none;">JERCAT</a></p>
 </footer>
 
+<!-- BOUTON TEL MOBILE -->
+<a href="tel:" id="tel-fixed">📞 &nbsp;Commander</a>
+
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
 <script>
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, {threshold:.1});
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+// ── PARTICULES
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.parentElement.offsetWidth;
+  canvas.height = canvas.parentElement.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 0.5,
+    dx: (Math.random() - 0.5) * 0.3,
+    dy: -Math.random() * 0.5 - 0.1,
+    alpha: Math.random() * 0.6 + 0.2
+  });
+}
+
+function animParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
+    ctx.fill();
+    p.x += p.dx; p.y += p.dy;
+    if (p.y < 0) { p.y = canvas.height; p.x = Math.random() * canvas.width; }
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+  });
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// ── COMPTEURS
+function animateCounter(el, target) {
+  let current = 0;
+  const step = target / 60;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { el.textContent = target + '+'; clearInterval(timer); return; }
+    el.textContent = Math.floor(current) + '+';
+  }, 25);
+}
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.counter-val').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.target));
+      });
+      obs.disconnect();
+    }
+  });
+}, {threshold: 0.5});
+const countersEl = document.querySelector('.counters');
+if (countersEl) obs.observe(countersEl);
+
+// ── REVEAL AU SCROLL
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ── NAV SCROLLED
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 50);
+  document.getElementById('scroll-top').classList.toggle('show', window.scrollY > 400);
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCr0SWaroXjGGv72XVla61GN0rQtxg_5A8",
+  authDomain: "chez-akay.firebaseapp.com",
+  projectId: "chez-akay",
+  storageBucket: "chez-akay.firebasestorage.app",
+  messagingSenderId: "60180585524",
+  appId: "1:60180585524:web:86207b403e614c481e7e61"
+};
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const conf = await getDoc(doc(db,'config','restaurant'));
+  if (conf.exists()) {
+    const c = conf.data();
+    if (c.tel) {
+      document.getElementById('tel-display').textContent = c.tel;
+      document.getElementById('tel-fixed').href = 'tel:' + c.tel.replace(/\s/g,'');
+      document.getElementById('tel-fixed').innerHTML = '📞 &nbsp;' + c.tel;
+    }
+  }
+} catch(e) {}
 </script>
 <script src="cookies.js"></script>
 <script src="chatbot.js"></script>
