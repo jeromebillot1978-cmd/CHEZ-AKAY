@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chez Akay – La Carte</title>
+<title>Votre Enseigne – La Carte</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
   :root{--gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6820;--black:#0a0a08;--surface:#13130d;--surface2:#1c1c12;--cream:#f5ead0;--muted:#6a5a3a;--border:#2a2618;}
@@ -110,7 +110,7 @@
 
 <header>
   <div class="header-inner">
-    <div><a class="logo-main" href="index.html">Chez Akay</a><div class="logo-sub">La carte</div></div>
+    <div><a class="logo-main" href="index.html">Votre Enseigne</a><div class="logo-sub">La carte</div></div>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="index.html#contact">Contact</a>
@@ -174,7 +174,7 @@
 </main>
 
 <footer>
-  <p>Chez Akay · Origny-Sainte-Benoîte</p>
+  <p>Votre Enseigne · Origny-Sainte-Benoîte</p>
   <p id="footer-tel">Pizzas · Bruschetta · Pâtes · Salades</p>
   <p style="margin-top:8px;"><a href="legales.html" style="font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:2px;color:#6a5a3a;text-decoration:none;">Mentions légales</a></p>
 </footer>
@@ -301,9 +301,9 @@ import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gsta
 
 const firebaseConfig = {
   apiKey: "AIzaSyCr0SWaroXjGGv72XVla61GN0rQtxg_5A8",
-  authDomain: "chez-akay.firebaseapp.com",
-  projectId: "chez-akay",
-  storageBucket: "chez-akay.firebasestorage.app",
+  authDomain: "votre-enseigne.firebaseapp.com",
+  projectId: "votre-enseigne",
+  storageBucket: "votre-enseigne.firebasestorage.app",
   messagingSenderId: "60180585524",
   appId: "1:60180585524:web:86207b403e614c481e7e61"
 };
@@ -336,7 +336,7 @@ try {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   for (const cat of CATS) {
-    const snap = await getDocs(collection(db,'akay_'+cat));
+    const snap = await getDocs(collection(db,'votre-enseigne_'+cat));
     const items = [];
     snap.forEach(d => { if(d.data().visible!==false) items.push(d.data()); });
     if (items.length) { items.sort((a,b)=>(a.order||0)-(b.order||0)); renderCards(items, cat+'-grid', cat); }
