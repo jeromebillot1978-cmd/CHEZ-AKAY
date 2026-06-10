@@ -1,444 +1,409 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chez Akay – Administration</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-  <style>
-    :root{--gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6820;--black:#0a0a08;--surface:#13130d;--surface2:#1c1c12;--surface3:#222217;--cream:#f5ead0;--muted:#6a5a3a;--border:#2a2618;--green:#2e6b2e;--green-light:#7cb87c;--red:#6b2e2e;--red-light:#c47a7a;}
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;display:flex;flex-direction:column;}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px),repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.012) 50px,rgba(201,168,76,0.012) 51px);}
-    header{position:relative;z-index:10;border-bottom:1px solid rgba(201,168,76,0.15);}
-    .header-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;}
-    .logo-main{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-shadow:0 0 30px rgba(201,168,76,0.3);}
-    .logo-sub{font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:5px;color:var(--muted);}
-    .header-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent);opacity:0.4;}
-    .admin-badge{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:5px 14px;border-radius:2px;}
-    .btn-logout{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;color:var(--muted);background:transparent;border:1px solid rgba(201,168,76,0.15);padding:5px 14px;border-radius:2px;cursor:pointer;transition:all 0.3s;margin-left:10px;}
-    .btn-logout:hover{color:var(--gold);border-color:var(--gold);}
-    #admin-login{flex:1;display:flex;align-items:center;justify-content:center;padding:52px 16px;position:relative;z-index:1;}
-    .login-card{width:100%;max-width:400px;background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:3px;padding:40px 36px;position:relative;}
-    .c-tl,.c-tr,.c-bl,.c-br{position:absolute;width:14px;height:14px;border-color:rgba(201,168,76,0.4);border-style:solid;}
-    .c-tl{top:7px;left:7px;border-width:1px 0 0 1px;}.c-tr{top:7px;right:7px;border-width:1px 1px 0 0;}
-    .c-bl{bottom:7px;left:7px;border-width:0 0 1px 1px;}.c-br{bottom:7px;right:7px;border-width:0 1px 1px 0;}
-    .orn{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-    .orn-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark));}
-    .orn-line.r{background:linear-gradient(90deg,var(--gold-dark),transparent);}
-    .orn-d{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
-    .card-title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-align:center;margin-bottom:4px;}
-    .card-sub{font-size:0.95rem;font-style:italic;color:var(--muted);text-align:center;margin-bottom:28px;}
-    label{display:block;font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:7px;}
-    .form-group{margin-bottom:20px;}
-    input[type="email"],input[type="password"],input[type="text"],input[type="number"],input[type="url"],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:12px 14px;color:var(--cream);font-size:1rem;font-family:'Cormorant Garamond',serif;outline:none;transition:border-color 0.3s;letter-spacing:0.5px;}
-    input:focus,textarea:focus,select:focus{border-color:var(--gold);}
-    input::placeholder,textarea::placeholder{color:var(--muted);font-style:italic;}
-    select option{background:var(--surface2);}
-    textarea{resize:vertical;min-height:80px;}
-    .btn-gold{width:100%;padding:14px;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer;transition:background-position 0.5s,transform 0.1s;}
-    .btn-gold:hover{background-position:left;}
-    .btn-gold:active{transform:scale(0.98);}
-    .msg{margin-top:14px;padding:10px 14px;border-radius:2px;font-size:0.9rem;font-style:italic;display:none;}
-    .msg.error{background:rgba(100,20,20,0.3);color:var(--red-light);border:1px solid rgba(107,46,46,0.4);display:block;}
-    .msg.success{background:rgba(20,60,20,0.3);color:var(--green-light);border:1px solid rgba(46,107,46,0.4);display:block;}
-    #admin-app{flex:1;display:none;position:relative;z-index:1;}
-    .tabs-nav{display:flex;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:50;}
-    .tab-btn{flex:1;padding:16px 8px;font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;position:relative;transition:color 0.3s;text-align:center;}
-    .tab-btn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.3s;}
-    .tab-btn.active{color:var(--gold);}
-    .tab-btn.active::after{transform:scaleX(1);}
-    .tab-content{display:none;max-width:960px;margin:0 auto;padding:36px 20px 60px;}
-    .tab-content.active{display:block;}
-    .s-title{font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dark);display:flex;align-items:center;gap:14px;margin-bottom:18px;margin-top:36px;}
-    .s-title::before,.s-title::after{content:'';flex:1;height:1px;background:var(--border);}
-    .s-title::before{max-width:30px;}
-    .s-title:first-child{margin-top:0;}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
-    .stat-card{background:var(--surface);border:1px solid rgba(201,168,76,0.15);border-radius:3px;padding:20px;text-align:center;}
-    .stat-val{font-family:'Cinzel',serif;font-size:2rem;font-weight:900;color:var(--gold);line-height:1;}
-    .stat-label{font-size:0.8rem;font-style:italic;color:var(--muted);margin-top:5px;}
-    .history-card{background:var(--surface);border:1px solid rgba(201,168,76,0.15);border-radius:3px;padding:20px;}
-    .history-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);}
-    .history-row:last-child{border-bottom:none;}
-    .h-name{font-family:'Cinzel',serif;font-size:0.82rem;color:var(--cream);letter-spacing:1px;}
-    .h-date{font-size:0.78rem;font-style:italic;color:var(--muted);margin-top:2px;}
-    .h-empty{text-align:center;font-style:italic;color:var(--muted);padding:24px;}
-    .menu-items-list{display:flex;flex-direction:column;gap:12px;}
-    .menu-item-row{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;display:grid;grid-template-columns:1fr auto;gap:0;overflow:hidden;transition:border-color 0.3s;}
-    .menu-item-row:hover{border-color:rgba(201,168,76,0.3);}
-    .mir-body{padding:14px 16px;display:flex;flex-direction:column;justify-content:center;}
-    .mir-name{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--cream);letter-spacing:1px;}
-    .mir-meta{font-size:0.8rem;font-style:italic;color:var(--muted);margin-top:2px;}
-    .mir-price{font-family:'Cinzel',serif;font-size:0.9rem;color:var(--gold);margin-top:2px;}
-    .mir-actions{display:flex;flex-direction:column;border-left:1px solid var(--border);}
-    .mir-btn{flex:1;padding:0 16px;font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;background:transparent;border:none;cursor:pointer;transition:background 0.2s;color:var(--muted);border-bottom:1px solid var(--border);}
-    .mir-btn:last-child{border-bottom:none;}
-    .mir-btn:hover{background:rgba(201,168,76,0.08);color:var(--gold);}
-    .mir-btn.del:hover{background:rgba(107,46,46,0.2);color:var(--red-light);}
-    .mir-hidden{opacity:0.4;}
-    .qp{font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:1px;padding:6px 12px;border-radius:2px;border:1px solid var(--border);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.2s;}
-    .qp:hover{border-color:var(--gold);color:var(--gold);}
-    .burger-form{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:3px;padding:24px;position:relative;}
-    .form-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);letter-spacing:2px;margin-bottom:20px;}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-    @media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
-    .form-group-full{grid-column:1/-1;}
-    .checkbox-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
-    .checkbox-row input[type="checkbox"]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;}
-    .checkbox-row label{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:1px;color:var(--muted);margin-bottom:0;cursor:pointer;}
-    .photo-preview{width:100%;height:100px;object-fit:cover;border-radius:2px;margin-top:8px;border:1px solid var(--border);display:none;}
-    .form-actions{display:flex;gap:12px;margin-top:20px;}
-    .btn-cancel{flex:1;padding:12px;background:transparent;border:1px solid var(--border);border-radius:2px;font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all 0.3s;}
-    .btn-cancel:hover{border-color:var(--gold);color:var(--gold);}
-    .btn-save{flex:2;}
-    .infos-form{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:3px;padding:24px;}
-    #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid rgba(201,168,76,0.3);border-radius:3px;padding:14px 24px;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;z-index:999;opacity:0;transition:all 0.4s;pointer-events:none;white-space:nowrap;}
-    #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-    #toast.error{color:var(--red-light);border-color:rgba(107,46,46,0.4);}
-    footer{position:relative;z-index:1;text-align:center;padding:20px;border-top:1px solid rgba(201,168,76,0.1);}
-    footer p{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:2;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre Enseigne – Pizzeria d'Origny-Sainte-Benoîte</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root{--gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6820;--black:#0a0a08;--surface:#13130d;--surface2:#1c1c12;--cream:#f5ead0;--muted:#6a5a3a;--border:#2a2618;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--black);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+
+  /* TEXTURE GRAIN */
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(201,168,76,0.01) 50px,rgba(201,168,76,0.01) 51px),
+    repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(201,168,76,0.01) 50px,rgba(201,168,76,0.01) 51px);
+    opacity:0.8;}
+
+  /* NAV */
+  nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(10,10,8,0.97);border-bottom:1px solid rgba(201,168,76,0.15);transition:box-shadow .3s;}
+  nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,0.5);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;}
+  .logo{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:3px;text-shadow:0 0 30px rgba(201,168,76,0.3);}
+  .logo span{color:var(--cream);}
+  .nav-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold-light),var(--gold),transparent);opacity:0.4;}
+  nav ul{list-style:none;display:flex;gap:28px;align-items:center;}
+  nav ul a{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:.3s;}
+  nav ul a:hover{color:var(--gold);}
+  .nav-cta{color:var(--black)!important;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;padding:8px 18px;border-radius:2px;transition:background-position 0.4s!important;}
+  .nav-cta:hover{background-position:left!important;}
+
+  /* HERO + PARTICULES */
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;overflow:hidden;}
+  #particles-canvas{position:absolute;inset:0;pointer-events:none;}
+  .hero-content{position:relative;z-index:2;}
+  .orn{display:flex;align-items:center;gap:10px;margin-bottom:16px;justify-content:center;}
+  .orn-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark));}
+  .orn-line.r{background:linear-gradient(90deg,var(--gold-dark),transparent);}
+  .orn-d{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+  .hero-badge{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:6px 20px;border-radius:2px;margin-bottom:20px;display:inline-block;animation:fadeDown .8s ease both;}
+  #hero h1{font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:1;color:var(--cream);letter-spacing:4px;animation:fadeDown .8s ease .2s both;}
+  #hero h1 span{color:var(--gold);}
+  .hero-sub{font-size:1.2rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;animation:fadeDown .8s ease .4s both;}
+  .btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeDown .8s ease .6s both;}
+  .btn-gold{padding:14px 36px;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer;transition:background-position .5s;text-decoration:none;display:inline-block;}
+  .btn-gold:hover{background-position:left;}
+  .btn-outline{padding:14px 36px;background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.4);font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;border-radius:2px;text-decoration:none;transition:.3s;}
+  .btn-outline:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
+  .scroll-indicator{margin-top:60px;color:var(--muted);font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;animation:bounce 2s infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
+
+  /* COMPTEURS */
+  .counters{display:flex;gap:40px;flex-wrap:wrap;justify-content:center;margin-top:50px;animation:fadeDown .8s ease .8s both;}
+  .counter-item{text-align:center;}
+  .counter-val{font-family:'Cinzel',serif;font-size:2.5rem;font-weight:900;color:var(--gold);line-height:1;text-shadow:0 0 20px rgba(201,168,76,0.3);}
+  .counter-label{font-size:0.78rem;font-style:italic;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+
+  /* SÉPARATEUR PIZZA SVG */
+  .pizza-sep{display:flex;align-items:center;gap:16px;padding:0 20px;opacity:0.25;margin:0 auto;max-width:800px;}
+  .pizza-sep-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+  .pizza-sep-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+  .pizza-sep-icon{font-size:1.2rem;flex-shrink:0;}
+
+  /* SECTIONS */
+  .section-wrap{max-width:1100px;margin:0 auto;padding:80px 20px;position:relative;z-index:1;}
+  .section-bg{background:var(--surface);padding:80px 20px;position:relative;z-index:1;}
+  .s-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dark);display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .s-label::before,.s-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  .s-label::before{max-width:30px;}
+  .s-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--cream);letter-spacing:2px;margin-bottom:8px;}
+  .s-title span{color:var(--gold);}
+  .gold-line{width:60px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0 40px;}
+
+  /* CARDS SPÉCIALITÉS */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
+  .card{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;padding:28px 22px;transition:.3s;position:relative;overflow:hidden;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(201,168,76,0.05),transparent 70%);opacity:0;transition:.3s;}
+  .card:hover{border-color:rgba(201,168,76,0.35);transform:translateY(-5px);}
+  .card:hover::after{opacity:1;}
+  .card-icon{font-size:2rem;margin-bottom:14px;}
+  .card h3{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--gold);letter-spacing:2px;margin-bottom:10px;}
+  .card p{color:var(--muted);font-size:0.92rem;font-style:italic;line-height:1.7;}
+
+  /* À PROPOS */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+  @media(max-width:700px){.about-grid{grid-template-columns:1fr;}}
+  .about-img{aspect-ratio:4/3;background:var(--surface2);border:1px solid rgba(201,168,76,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden;}
+  .about-img::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(201,168,76,0.08),transparent 60%);}
+  .about-text h3{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--gold);letter-spacing:2px;margin-bottom:16px;}
+  .about-text p{color:var(--muted);font-style:italic;line-height:1.9;font-size:1.05rem;margin-bottom:14px;}
+
+  /* APERÇU MENU */
+  .menu-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+  .menu-item{background:var(--surface);border:1px solid rgba(201,168,76,0.1);border-radius:3px;padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;transition:.3s;}
+  .menu-item:hover{border-color:rgba(201,168,76,0.3);transform:translateX(4px);}
+  .menu-item h4{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--cream);letter-spacing:1px;margin-bottom:4px;}
+  .menu-item p{font-size:0.82rem;font-style:italic;color:var(--muted);max-width:240px;line-height:1.5;}
+  .price{font-family:'Cinzel',serif;color:var(--gold);font-size:1rem;font-weight:700;white-space:nowrap;margin-left:12px;}
+
+  /* HORAIRES */
+  .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+  .info-box{background:var(--surface);border:1px solid rgba(201,168,76,0.12);border-radius:3px;padding:28px;position:relative;}
+  .info-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .info-box h3{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--gold);letter-spacing:2px;margin-bottom:20px;text-transform:uppercase;}
+  .horaire-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;color:var(--muted);}
+  .horaire-row:last-child{border:none;}
+  .horaire-row .day{color:var(--cream);font-weight:600;}
+
+  /* CONTACT */
+  .form-group{margin-bottom:18px;}
+  .form-group label{display:block;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:7px;}
+  .form-group input,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:11px 14px;color:var(--cream);font-size:0.95rem;font-family:'Cormorant Garamond',serif;outline:none;transition:border-color .3s;}
+  .form-group input:focus,.form-group textarea:focus{border-color:var(--gold);}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted);font-style:italic;}
+  .form-group textarea{height:120px;resize:vertical;}
+
+  /* BOUTON TEL FIXE MOBILE */
+  #tel-fixed{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;background:linear-gradient(135deg,#7a5c18,#c9a84c,#f0d080,#c9a84c,#7a5c18);background-size:200% 100%;background-position:right;color:var(--black);font-family:'Cinzel',serif;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;border-radius:30px;border:none;text-decoration:none;box-shadow:0 4px 20px rgba(201,168,76,0.4);transition:background-position .4s,transform .2s;}
+  #tel-fixed:hover{background-position:left;transform:translateX(-50%) scale(1.05);}
+  @media(max-width:768px){#tel-fixed{display:block;}}
+
+  /* SCROLL TO TOP */
+  #scroll-top{position:fixed;bottom:28px;right:28px;z-index:200;width:44px;height:44px;background:var(--surface);border:1px solid rgba(201,168,76,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.1rem;cursor:pointer;opacity:0;pointer-events:none;transition:all .3s;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+  #scroll-top.show{opacity:1;pointer-events:all;}
+  #scroll-top:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(201,168,76,0.1);}
+  .footer-logo{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--gold);letter-spacing:3px;margin-bottom:6px;}
+  footer p{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:2.2;}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(28px);transition:.7s ease;}
+  .reveal.visible{opacity:1;transform:none;}
+
+  @media(max-width:600px){.nav-inner{padding:12px 16px;}nav ul{gap:14px;}nav ul a:not(.nav-cta){display:none;}}
+</style>
 </head>
 <body>
-<header>
-  <div class="header-inner">
-    <div><div class="logo-main">Chez Akay</div><div class="logo-sub">Administration</div></div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="admin-badge" id="admin-badge" style="display:none">Gérant</div>
-      <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;color:var(--muted);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color=''">Accueil</a>
-      <button class="btn-logout" id="btn-logout" style="display:none">Déconnexion</button>
-    </div>
-  </div>
-  <div class="header-line"></div>
-</header>
 
-<!-- LOGIN -->
-<div id="admin-login">
-  <div class="login-card">
-    <div class="c-tl"></div><div class="c-tr"></div><div class="c-bl"></div><div class="c-br"></div>
+<nav id="main-nav">
+  <div class="nav-inner">
+    <div>
+      <div class="logo">VOTRE <span>ENSEIGNE</span></div>
+      <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;">Pizzeria · Origny-Sainte-Benoîte</div>
+    </div>
+    <ul>
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="admin.html" class="nav-cta">Admin</a></li>
+    </ul>
+  </div>
+  <div class="nav-line"></div>
+</nav>
+
+<!-- HERO -->
+<div id="accueil" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse at center,#1a1508 0%,#0a0a08 70%);position:relative;z-index:1;overflow:hidden;">
+  <canvas id="particles-canvas" style="position:absolute;inset:0;pointer-events:none;"></canvas>
+  <div class="hero-content" style="position:relative;z-index:2;">
     <div class="orn"><div class="orn-line"></div><div class="orn-d"></div><div class="orn-line r"></div></div>
-    <div class="card-title">Administration</div>
-    <div class="card-sub">Accès réservé au gérant</div>
-    <div class="form-group"><label>Email admin</label><input type="email" id="adm-email" placeholder="admin@chezakay.fr"/></div>
-    <div class="form-group">
-      <label>Mot de passe</label>
-      <div style="position:relative;">
-        <input type="password" id="adm-pass" placeholder="••••••••" style="padding-right:44px;"/>
-        <button type="button" onclick="togglePass()" style="position:absolute;right:0;top:0;bottom:0;width:42px;background:transparent;border:none;cursor:pointer;color:#6a5a3a;font-size:1.1rem;" id="toggle-pass-btn">👁</button>
-      </div>
+    <div class="hero-badge">Pizzas · Bruschetta · Pâtes · Salades</div>
+    <h1 style="font-family:'Cinzel',serif;font-size:clamp(3rem,8vw,7rem);font-weight:900;color:var(--cream);letter-spacing:4px;line-height:1;">VOTRE <span style="color:var(--gold)">ENSEIGNE</span></h1>
+    <p style="font-size:1.15rem;font-style:italic;color:var(--muted);margin:20px 0 40px;max-width:500px;line-height:1.8;">La pizzeria d'Origny-Sainte-Benoîte — saveurs authentiques, recettes généreuses, dès 18h30</p>
+    <div class="btns">
+      <a href="menu.html" class="btn-gold">Voir la carte</a>
+      <a href="#contact" class="btn-outline">Nous contacter</a>
     </div>
-    <button class="btn-gold" onclick="adminLogin()">Accéder au panneau</button>
-    <div style="display:flex;align-items:center;gap:12px;margin:18px 0;">
-      <div style="flex:1;height:1px;background:#2a2618;"></div>
-      <span style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;color:#6a5a3a;">OU</span>
-      <div style="flex:1;height:1px;background:#2a2618;"></div>
+    <!-- COMPTEURS -->
+    <div class="counters">
+      <div class="counter-item"><div class="counter-val" data-target="20">0</div><div class="counter-label">Pizzas au menu</div></div>
+      <div class="counter-item"><div class="counter-val" data-target="5">0</div><div class="counter-label">Années d'expérience</div></div>
+      <div class="counter-item"><div class="counter-val" data-target="4">0</div><div class="counter-label">Types de cuisine</div></div>
     </div>
-    <button class="btn-gold" style="background:transparent;border:1px solid rgba(201,168,76,0.2);color:var(--cream);display:flex;align-items:center;justify-content:center;gap:10px;" onclick="adminGoogleLogin()">
-      <svg viewBox="0 0 48 48" style="width:18px;height:18px"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.6 32.6 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.4 35.5 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.4C9.7 35.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.6l6.2 5.2C37 37.7 44 32 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
-      Connexion avec Google
-    </button>
-    <div id="login-msg" class="msg"></div>
+  </div>
+  <div class="scroll-indicator" style="margin-top:50px;font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:3px;color:var(--muted);position:relative;z-index:2;">▼ &nbsp; Découvrir</div>
+</div>
+
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">🍕</div><div class="pizza-sep-icon">⭐</div><div class="pizza-sep-icon">🍕</div><div class="pizza-sep-line r"></div></div>
+</div>
+
+<!-- SPÉCIALITÉS -->
+<div class="section-wrap reveal">
+  <div class="s-label">Nos points forts</div>
+  <h2 class="s-title">Nos <span>Spécialités</span></h2>
+  <div class="gold-line"></div>
+  <div class="cards">
+    <div class="card"><div class="card-icon">🍕</div><h3>Pizzas Artisanales</h3><p>Base tomate ou crème, plus de 20 recettes dont des pizzas signature comme La Driss, La Canibale ou La Montagnarde.</p></div>
+    <div class="card"><div class="card-icon">🥖</div><h3>Bruschetta</h3><p>5 recettes maison — 3 fromages, piquante, chèvre-miel, carbo ou personnalisée avec 4 ingrédients au choix.</p></div>
+    <div class="card"><div class="card-icon">🍝</div><h3>Pâtes Fraîches</h3><p>Carbo, Bolo, Fromagères, Vague saumon ou Bourguignonne — des recettes généreuses et savoureuses.</p></div>
+    <div class="card"><div class="card-icon">🥗</div><h3>Salades</h3><p>Bivague, César, Ch'ti ou Bergère — des salades fraîches et complètes pour toutes les envies.</p></div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="admin-app">
-  <div class="tabs-nav">
-    <button class="tab-btn active" onclick="switchTab('menu',this)">Carte & Menu</button>
-    <button class="tab-btn" onclick="switchTab('infos',this)">Infos restaurant</button>
-    <button class="tab-btn" onclick="switchTab('stats',this)">Statistiques</button>
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">🥖</div><div class="pizza-sep-icon">✦</div><div class="pizza-sep-icon">🥗</div><div class="pizza-sep-line r"></div></div>
+</div>
+
+<!-- À PROPOS -->
+<div class="section-bg" id="about">
+<div style="max-width:1100px;margin:0 auto;padding:0 20px;">
+  <div class="reveal">
+    <div class="s-label">Notre histoire</div>
+    <h2 class="s-title">À <span>Propos</span></h2>
+    <div class="gold-line"></div>
+    <div class="about-grid">
+      <div class="about-img" style="padding:0;background:none;">
+    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80&fit=crop" alt="Pizza Votre Enseigne" style="width:100%;height:100%;object-fit:cover;border-radius:3px;display:block;"/>
   </div>
-
-  <!-- ONGLET 1 : MENU -->
-  <div class="tab-content active" id="tab-menu">
-    <div class="s-title">Bruschetta</div>
-    <div class="menu-items-list" id="bruschetta-list"><div class="h-empty">Chargement…</div></div>
-    <div style="margin-top:16px;text-align:right"><button class="qp" style="color:var(--gold);border-color:var(--gold);" onclick="openForm('bruschetta')">+ Ajouter</button></div>
-
-    <div class="s-title">Pizzas Base Tomate</div>
-    <div class="menu-items-list" id="tomate-list"><div class="h-empty">Chargement…</div></div>
-    <div style="margin-top:16px;text-align:right"><button class="qp" style="color:var(--gold);border-color:var(--gold);" onclick="openForm('tomate')">+ Ajouter</button></div>
-
-    <div class="s-title">Pizzas Base Crème</div>
-    <div class="menu-items-list" id="creme-list"><div class="h-empty">Chargement…</div></div>
-    <div style="margin-top:16px;text-align:right"><button class="qp" style="color:var(--gold);border-color:var(--gold);" onclick="openForm('creme')">+ Ajouter</button></div>
-
-    <div class="s-title">Pizzas Spécial</div>
-    <div class="menu-items-list" id="special-list"><div class="h-empty">Chargement…</div></div>
-    <div style="margin-top:16px;text-align:right"><button class="qp" style="color:var(--gold);border-color:var(--gold);" onclick="openForm('special')">+ Ajouter</button></div>
-
-    <div class="s-title">Pâtes</div>
-    <div class="menu-items-list" id="pates-list"><div class="h-empty">Chargement…</div></div>
-    <div style="margin-top:16px;text-align:right"><button class="qp" style="color:var(--gold);border-color:var(--gold);" onclick="openForm('pates')">+ Ajouter</button></div>
-
-    <div class="s-title">Salades</div>
-    <div class="menu-items-list" id="salades-list"><div class="h-empty">Chargement…</div></div>
-    <div style="margin-top:16px;text-align:right"><button class="qp" style="color:var(--gold);border-color:var(--gold);" onclick="openForm('salades')">+ Ajouter</button></div>
-
-    <!-- FORMULAIRE -->
-    <div id="item-form-wrap" style="display:none;margin-top:32px;">
-      <div class="burger-form">
-        <div class="c-tl"></div><div class="c-tr"></div><div class="c-bl"></div><div class="c-br"></div>
-        <div class="form-title" id="form-title">Nouvel article</div>
-        <input type="hidden" id="edit-id"/>
-        <input type="hidden" id="edit-cat"/>
-        <div class="form-grid">
-          <div class="form-group"><label>Nom</label><input type="text" id="f-name" placeholder="La Montagnarde"/></div>
-          <div class="form-group"><label>Prix (€)</label><input type="number" id="f-price" placeholder="13" step="0.50" min="0"/></div>
-          <div class="form-group form-group-full"><label>Description / Ingrédients</label><textarea id="f-desc" placeholder="Oignons, lardons, chèvre, bleu, mozza…"></textarea></div>
-          <div class="form-group form-group-full"><label>URL Photo (optionnel)</label><input type="url" id="f-photo" placeholder="https://…" oninput="previewPhoto()"/><img class="photo-preview" id="photo-preview" alt="Aperçu"/></div>
-          <div class="form-group form-group-full">
-            <div class="checkbox-row"><input type="checkbox" id="f-visible" checked/><label for="f-visible">Visible sur la carte</label></div>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn-cancel" onclick="closeForm()">Annuler</button>
-          <button class="btn-gold btn-save" onclick="saveItem()">Enregistrer</button>
-        </div>
+      <div class="about-text">
+        <h3>La pizzeria du cœur de l'Aisne</h3>
+        <p>Votre Enseigne, c'est une pizzeria familiale nichée au cœur d'Origny-Sainte-Benoîte, dans l'Aisne. Depuis plusieurs années, nous préparons chaque pizza à la commande, avec des produits frais soigneusement sélectionnés.</p>
+        <p>Notre carte propose plus de 20 recettes — des classiques intemporels aux créations signature comme La Montagnarde, La Canibale ou La Saumon Boursin. Sans oublier nos bruschetta, pâtes fraîches et salades généreuses.</p>
+        <p>Une cuisine sincère, faite avec passion, pour vous régaler en famille ou entre amis.</p>
+        <a href="menu.html" class="btn-gold" style="margin-top:8px;display:inline-block;">Découvrir la carte</a>
       </div>
-    </div>
-  </div>
-
-  <!-- ONGLET 2 : INFOS -->
-  <div class="tab-content" id="tab-infos">
-    <div class="s-title">Informations du restaurant</div>
-    <div class="infos-form">
-      <div class="form-grid">
-        <div class="form-group"><label>Téléphone</label><input type="text" id="inf-tel" placeholder="06 XX XX XX XX"/></div>
-        <div class="form-group"><label>Début service</label><input type="text" id="inf-liv-start" placeholder="18h30"/></div>
-        <div class="form-group"><label>Fin service</label><input type="text" id="inf-liv-end" placeholder="22h30"/></div>
-        <div class="form-group"><label>Ville</label><input type="text" id="inf-ville" placeholder="Origny-Sainte-Benoîte"/></div>
-        <div class="form-group form-group-full"><label>Slogan</label><input type="text" id="inf-slogan" placeholder="La pizzeria d'Origny-Sainte-Benoîte"/></div>
-        <div class="form-group form-group-full"><label>Message d'accueil (optionnel)</label><textarea id="inf-msg" placeholder="Bienvenue chez Akay…"></textarea></div>
-      </div>
-      <button class="btn-gold" style="margin-top:8px" onclick="saveInfos()">Enregistrer les informations</button>
-    </div>
-  </div>
-
-  <!-- ONGLET 3 : STATS -->
-  <div class="tab-content" id="tab-stats">
-    <div class="s-title">Statistiques</div>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-val" id="stat-items">–</div><div class="stat-label">Articles au menu</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-pizzas">–</div><div class="stat-label">Pizzas</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-pates">–</div><div class="stat-label">Pâtes & Salades</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-hidden">–</div><div class="stat-label">Articles masqués</div></div>
     </div>
   </div>
 </div>
+</div>
 
-<div id="toast"></div>
-<footer><p>Chez Akay · Administration</p><p>Accès réservé au personnel autorisé</p></footer>
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">🍝</div><div class="pizza-sep-icon">✦</div><div class="pizza-sep-icon">🍝</div><div class="pizza-sep-line r"></div></div>
+</div>
+
+<!-- APERÇU MENU -->
+<div class="section-wrap reveal">
+  <div class="s-label">Sélection</div>
+  <h2 class="s-title">Quelques <span>Incontournables</span></h2>
+  <div class="gold-line"></div>
+  <div class="menu-preview">
+    <div class="menu-item"><div><h4>La Margareta</h4><p>Base tomate, olives, mozza, buffala</p></div><div class="price">10 €</div></div>
+    <div class="menu-item"><div><h4>La Montagnarde</h4><p>Oignons, lardons, chèvre, bleu, mozza, confiture de figue</p></div><div class="price">13 €</div></div>
+    <div class="menu-item"><div><h4>La Canibale</h4><p>Oignons, merguez, chorizo, viande hachée, bacon, cheddar</p></div><div class="price">14 €</div></div>
+    <div class="menu-item"><div><h4>La Saumon Boursin</h4><p>Crème de boursin, saumon, aneth, mozza</p></div><div class="price">15 €</div></div>
+    <div class="menu-item"><div><h4>Bruschetta 3 Fromages</h4><p>Base tomate, mozza, cheddar, maroille</p></div><div class="price">8 €</div></div>
+    <div class="menu-item"><div><h4>La Bourguignonne</h4><p>Champignons, bœuf, sauce fond de veau, mozza</p></div><div class="price">12 €</div></div>
+  </div>
+  <div style="text-align:center;margin-top:32px;">
+    <a href="menu.html" class="btn-gold">Voir toute la carte</a>
+  </div>
+</div>
+
+<!-- SÉPARATEUR -->
+<div style="padding:24px 0;position:relative;z-index:1;">
+  <div class="pizza-sep"><div class="pizza-sep-line"></div><div class="pizza-sep-icon">⏰</div><div class="pizza-sep-icon">✦</div><div class="pizza-sep-icon">📍</div><div class="pizza-sep-line r"></div></div>
+</div>
+
+<!-- HORAIRES & CONTACT -->
+<div class="section-bg reveal" id="contact">
+<div style="max-width:1100px;margin:0 auto;padding:80px 20px;">
+  <div class="s-label">Pratique</div>
+  <h2 class="s-title">Horaires & <span>Contact</span></h2>
+  <div class="gold-line"></div>
+  <div class="info-grid">
+    <div class="info-box">
+      <h3>⏰ Horaires</h3>
+      <div class="horaire-row"><span class="day">Lundi</span><span>Fermé</span></div>
+      <div class="horaire-row"><span class="day">Mardi – Vendredi</span><span>18h30 – 22h30</span></div>
+      <div class="horaire-row"><span class="day">Samedi</span><span>12h – 14h · 18h30 – 23h</span></div>
+      <div class="horaire-row"><span class="day">Dimanche</span><span>12h – 14h · 18h30 – 22h</span></div>
+      <div style="margin-top:16px;font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:1px;color:var(--gold);">✦ Ouvert ce soir dès 18h30</div>
+    </div>
+    <div class="info-box">
+      <h3>📍 Nous trouver</h3>
+      <p style="color:var(--muted);font-style:italic;line-height:2.2;font-size:.92rem;">
+        <strong style="color:var(--cream);">Adresse :</strong> Origny-Sainte-Benoîte, Aisne<br>
+        <strong style="color:var(--cream);">Téléphone :</strong> <span id="tel-display" style="color:var(--gold);">À compléter</span><br>
+        <strong style="color:var(--cream);">Email :</strong> À compléter
+      </p>
+    </div>
+    <div class="info-box">
+      <h3>✉️ Nous écrire</h3>
+      <div class="form-group"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="votre@email.fr"></div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Votre message, réservation..."></textarea></div>
+      <button class="btn-gold" style="width:100%">Envoyer</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="footer-logo">VOTRE ENSEIGNE</div>
+  <p>Pizzas · Bruschetta · Pâtes · Salades</p>
+  <p>Origny-Sainte-Benoîte · Aisne</p>
+  <p style="margin-top:12px;"><a href="legales.html" style="color:var(--gold-dark);font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:2px;text-decoration:none;">Mentions légales</a></p>
+  <p style="margin-top:8px;">Site réalisé par <a href="https://web-jercat.vercel.app" style="color:var(--gold-dark);text-decoration:none;">JERCAT</a></p>
+</footer>
+
+<!-- BOUTON TEL MOBILE -->
+<a href="tel:" id="tel-fixed">📞 &nbsp;Commander</a>
+
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<script>
+// ── PARTICULES
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.parentElement.offsetWidth;
+  canvas.height = canvas.parentElement.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 0.5,
+    dx: (Math.random() - 0.5) * 0.3,
+    dy: -Math.random() * 0.5 - 0.1,
+    alpha: Math.random() * 0.6 + 0.2
+  });
+}
+
+function animParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
+    ctx.fill();
+    p.x += p.dx; p.y += p.dy;
+    if (p.y < 0) { p.y = canvas.height; p.x = Math.random() * canvas.width; }
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+  });
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// ── COMPTEURS
+function animateCounter(el, target) {
+  let current = 0;
+  const step = target / 60;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { el.textContent = target + '+'; clearInterval(timer); return; }
+    el.textContent = Math.floor(current) + '+';
+  }, 25);
+}
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.counter-val').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.target));
+      });
+      obs.disconnect();
+    }
+  });
+}, {threshold: 0.5});
+const countersEl = document.querySelector('.counters');
+if (countersEl) obs.observe(countersEl);
+
+// ── REVEAL AU SCROLL
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ── NAV SCROLLED
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 50);
+  document.getElementById('scroll-top').classList.toggle('show', window.scrollY > 400);
+});
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyCr0SWaroXjGGv72XVla61GN0rQtxg_5A8",
-  authDomain: "chez-akay.firebaseapp.com",
-  databaseURL: "https://chez-akay-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "chez-akay",
-  storageBucket: "chez-akay.firebasestorage.app",
+  authDomain: "votre-enseigne.firebaseapp.com",
+  projectId: "votre-enseigne",
+  storageBucket: "votre-enseigne.firebasestorage.app",
   messagingSenderId: "60180585524",
   appId: "1:60180585524:web:86207b403e614c481e7e61"
 };
-
-const ADMIN_EMAILS = ['jercat.bilman@gmail.com'];
-const CATS = ['bruschetta','tomate','creme','special','pates','salades'];
-
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-let editingCat = null;
-
-function toast(msg, isError=false) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.className = 'show' + (isError?' error':'');
-  setTimeout(() => el.className='', 3000);
-}
-
-window.togglePass = () => {
-  const i = document.getElementById('adm-pass'), b = document.getElementById('toggle-pass-btn');
-  i.type = i.type==='password'?'text':'password'; b.textContent = i.type==='password'?'👁':'🙈';
-};
-
-window.adminGoogleLogin = async () => {
-  try {
-    const c = await signInWithPopup(auth, new GoogleAuthProvider());
-    if (!ADMIN_EMAILS.includes(c.user.email)) { await signOut(auth); showMsg('Accès non autorisé.'); }
-  } catch { showMsg('Connexion Google annulée.'); }
-};
-
-window.adminLogin = async () => {
-  const e = document.getElementById('adm-email').value.trim();
-  const p = document.getElementById('adm-pass').value;
-  if (!e||!p) { showMsg('Remplissez tous les champs.'); return; }
-  try {
-    const c = await signInWithEmailAndPassword(auth,e,p);
-    if (!ADMIN_EMAILS.includes(c.user.email)) { await signOut(auth); showMsg('Accès non autorisé.'); }
-  } catch { showMsg('Identifiants incorrects.'); }
-};
-
-function showMsg(t) {
-  const el = document.getElementById('login-msg');
-  el.textContent = t; el.className = 'msg error';
-}
-
-onAuthStateChanged(auth, user => {
-  if (user && ADMIN_EMAILS.includes(user.email)) {
-    document.getElementById('admin-login').style.display='none';
-    document.getElementById('admin-app').style.display='block';
-    document.getElementById('admin-badge').style.display='inline-flex';
-    document.getElementById('btn-logout').style.display='inline-block';
-    loadAllMenus(); loadInfos();
-  } else {
-    document.getElementById('admin-login').style.display='flex';
-    document.getElementById('admin-app').style.display='none';
-    document.getElementById('admin-badge').style.display='none';
-    document.getElementById('btn-logout').style.display='none';
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const conf = await getDoc(doc(db,'config','restaurant'));
+  if (conf.exists()) {
+    const c = conf.data();
+    if (c.tel) {
+      document.getElementById('tel-display').textContent = c.tel;
+      document.getElementById('tel-fixed').href = 'tel:' + c.tel.replace(/\s/g,'');
+      document.getElementById('tel-fixed').innerHTML = '📞 &nbsp;' + c.tel;
+    }
   }
-});
-document.getElementById('btn-logout').onclick = () => signOut(auth);
-
-window.switchTab = (id, btn) => {
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tab-'+id).classList.add('active');
-};
-
-async function loadAllMenus() {
-  let total=0, pizzas=0, patesSalades=0, hidden=0;
-  for (const cat of CATS) {
-    const snap = await getDocs(collection(db,'akay_'+cat));
-    const el = document.getElementById(cat+'-list');
-    if (snap.empty) { el.innerHTML='<div class="h-empty">Aucun article.</div>'; continue; }
-    const items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()}));
-    el.innerHTML = items.map(item=>`
-      <div class="menu-item-row ${item.visible===false?'mir-hidden':''}">
-        <div class="mir-body">
-          <div class="mir-name">${item.name}${item.visible===false?' <span style="font-size:.65rem;color:var(--muted)">(masqué)</span>':''}</div>
-          <div class="mir-meta">${item.desc||''}</div>
-          <div class="mir-price">${item.price?item.price+' €':''}</div>
-        </div>
-        <div class="mir-actions">
-          <button class="mir-btn" onclick="editItem('${cat}','${item.id}')">Modifier</button>
-          <button class="mir-btn" onclick="toggleVisible('${cat}','${item.id}',${item.visible!==false})">${item.visible===false?'Afficher':'Masquer'}</button>
-          <button class="mir-btn del" onclick="deleteItem('${cat}','${item.id}')">Supprimer</button>
-        </div>
-      </div>`).join('');
-    total += items.length;
-    if (['bruschetta','tomate','creme','special'].includes(cat)) pizzas += items.length;
-    if (['pates','salades'].includes(cat)) patesSalades += items.length;
-    hidden += items.filter(i=>i.visible===false).length;
-  }
-  document.getElementById('stat-items').textContent = total;
-  document.getElementById('stat-pizzas').textContent = pizzas;
-  document.getElementById('stat-pates').textContent = patesSalades;
-  document.getElementById('stat-hidden').textContent = hidden;
-}
-
-window.openForm = (cat) => {
-  editingCat = cat;
-  document.getElementById('form-title').textContent = 'Nouvel article';
-  document.getElementById('edit-id').value='';
-  document.getElementById('edit-cat').value=cat;
-  document.getElementById('f-name').value='';
-  document.getElementById('f-price').value='';
-  document.getElementById('f-desc').value='';
-  document.getElementById('f-photo').value='';
-  document.getElementById('photo-preview').style.display='none';
-  document.getElementById('f-visible').checked=true;
-  document.getElementById('item-form-wrap').style.display='block';
-  document.getElementById('item-form-wrap').scrollIntoView({behavior:'smooth'});
-};
-
-window.editItem = async (cat, id) => {
-  editingCat = cat;
-  const snap = await getDoc(doc(db,'akay_'+cat,id));
-  if (!snap.exists()) return;
-  const d = snap.data();
-  document.getElementById('form-title').textContent='Modifier';
-  document.getElementById('edit-id').value=id;
-  document.getElementById('edit-cat').value=cat;
-  document.getElementById('f-name').value=d.name||'';
-  document.getElementById('f-price').value=d.price||'';
-  document.getElementById('f-desc').value=d.desc||'';
-  document.getElementById('f-photo').value=d.photo||'';
-  document.getElementById('f-visible').checked=d.visible!==false;
-  if(d.photo){document.getElementById('photo-preview').src=d.photo;document.getElementById('photo-preview').style.display='block';}
-  document.getElementById('item-form-wrap').style.display='block';
-  document.getElementById('item-form-wrap').scrollIntoView({behavior:'smooth'});
-};
-
-window.saveItem = async () => {
-  const cat   = document.getElementById('edit-cat').value || editingCat;
-  const id    = document.getElementById('edit-id').value;
-  const name  = document.getElementById('f-name').value.trim();
-  const price = parseFloat(document.getElementById('f-price').value)||0;
-  const desc  = document.getElementById('f-desc').value.trim();
-  const photo = document.getElementById('f-photo').value.trim();
-  const visible = document.getElementById('f-visible').checked;
-  if (!name) { toast('Le nom est obligatoire.',true); return; }
-  const data = {name,price,desc,photo,visible,updatedAt:serverTimestamp()};
-  try {
-    if (id) { await setDoc(doc(db,'akay_'+cat,id),data,{merge:true}); toast('Article mis à jour ✦'); }
-    else    { data.order=Date.now(); await addDoc(collection(db,'akay_'+cat),data); toast('Article ajouté ✦'); }
-    closeForm(); loadAllMenus();
-  } catch { toast('Erreur de sauvegarde.',true); }
-};
-
-window.closeForm = () => { document.getElementById('item-form-wrap').style.display='none'; };
-
-window.deleteItem = async (cat, id) => {
-  if (!confirm('Supprimer cet article ?')) return;
-  await deleteDoc(doc(db,'akay_'+cat,id));
-  toast('Article supprimé.'); loadAllMenus();
-};
-
-window.toggleVisible = async (cat, id, cur) => {
-  await updateDoc(doc(db,'akay_'+cat,id),{visible:!cur});
-  toast(cur?'Article masqué.':'Article affiché.'); loadAllMenus();
-};
-
-window.previewPhoto = () => {
-  const url=document.getElementById('f-photo').value.trim();
-  const img=document.getElementById('photo-preview');
-  if(url){img.src=url;img.style.display='block';} else img.style.display='none';
-};
-
-async function loadInfos() {
-  try {
-    const snap=await getDoc(doc(db,'config','restaurant'));
-    if(!snap.exists()) return;
-    const d=snap.data();
-    document.getElementById('inf-tel').value=d.tel||'';
-    document.getElementById('inf-liv-start').value=d.livStart||'';
-    document.getElementById('inf-liv-end').value=d.livEnd||'';
-    document.getElementById('inf-ville').value=d.ville||'';
-    document.getElementById('inf-slogan').value=d.slogan||'';
-    document.getElementById('inf-msg').value=d.message||'';
-  } catch {}
-}
-
-window.saveInfos = async () => {
-  const data = {
-    tel:      document.getElementById('inf-tel').value.trim(),
-    livStart: document.getElementById('inf-liv-start').value.trim(),
-    livEnd:   document.getElementById('inf-liv-end').value.trim(),
-    ville:    document.getElementById('inf-ville').value.trim(),
-    slogan:   document.getElementById('inf-slogan').value.trim(),
-    message:  document.getElementById('inf-msg').value.trim(),
-    updatedAt:serverTimestamp()
-  };
-  try {
-    await setDoc(doc(db,'config','restaurant'),data,{merge:true});
-    toast('Informations enregistrées ✦');
-  } catch { toast('Erreur de sauvegarde.',true); }
-};
+} catch(e) {}
 </script>
+<script src="cookies.js"></script>
+<script src="chatbot.js"></script>
 </body>
 </html>
