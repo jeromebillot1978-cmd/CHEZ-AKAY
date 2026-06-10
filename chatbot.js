@@ -1,4 +1,4 @@
-// chatbot.js – Chez Akay – Pizzeria d'Origny-Sainte-Benoîte
+// chatbot.js – Votre Enseigne – Pizzeria d'Origny-Sainte-Benoîte
 (function() {
 
   const REPONSES = [
@@ -136,13 +136,13 @@ Vous pouvez me demander des infos sur notre <b>menu</b>, nos <b>horaires</b>, no
   document.head.appendChild(style);
 
   document.body.insertAdjacentHTML('beforeend', `
-    <button id="fb-chat-bubble" aria-label="Chat Chez Akay">🍕<div id="fb-notif"></div></button>
+    <button id="fb-chat-bubble" aria-label="Chat Votre Enseigne">🍕<div id="fb-notif"></div></button>
     <div id="fb-chat-window" role="dialog" aria-label="Chat Leila">
       <div class="fb-deco"></div>
       <div class="fb-head">
         <div class="fb-avatar">👩‍🍳</div>
         <div class="fb-info">
-          <div class="fb-name">Leila – Chez Akay</div>
+          <div class="fb-name">Leila – Votre Enseigne</div>
           <div class="fb-status">En ligne</div>
         </div>
         <button class="fb-close" id="fb-close">✕</button>
