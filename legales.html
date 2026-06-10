@@ -1,6 +1,6 @@
-// cookies.js – Bannière RGPD Chez Akay
+// cookies.js – Bannière RGPD Votre Enseigne
 (function() {
-  const STORAGE_KEY = 'akay_cookies_consent';
+  const STORAGE_KEY = 'votre-enseigne_cookies_consent';
   if (localStorage.getItem(STORAGE_KEY)) return;
 
   const style = document.createElement('style');
